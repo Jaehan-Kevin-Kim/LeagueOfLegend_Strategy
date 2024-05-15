@@ -29,15 +29,6 @@ const ChampionCard: FC<Props> = ({
     (team: string, champion: Champion, position: string) => {
       onSelectChampion(team, champion, position);
       onClose();
-
-      // if (team === "Opponent") {
-      //   const updateTeamChampInfo = opponentTeamChampsTeamChampInfo.map((info) =>
-      //     teamChampInfo.position === position && teamChampInfo.team === team
-      //       ? { ...info, champion }
-      //       : info,
-      //   );
-      //   setOpponentTeamChampsInfo(updateTeamChampInfo);
-      // }
     },
     [onClose, onSelectChampion],
   );

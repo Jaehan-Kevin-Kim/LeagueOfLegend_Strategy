@@ -42,60 +42,16 @@ const Strategy = () => {
     console.log("initialChampsInfo: ", initialChampsInfo);
   }, [executeGetChampionsWithVersion]);
 
-  useEffect(() => {
-    console.log("teamChampsInfo updated:", teamChampsInfo);
-  }, [teamChampsInfo]);
-
-  //   const assignInitialMyTeamChampsInfo = useCallback(() => {
-  //     const myTeamMap = positions.map((position) => ({
-  //       team: "MyTeam",
-  //       champion: null,
-  //       position: position,
-  //     }));
-  //     setMyTeamChampsInfo(myTeamMap);
-  //   }, []);
-
-  //   const assignInitialOpponentTeamChampsInfo = useCallback(() => {
-  //     const opponentTeamMap = positions.map((position) => ({
-  //       team: "Opponent",
-  //       champion: null,
-  //       position: position,
-  //     }));
-  //     setOpponentTeamChampsInfo(opponentTeamMap);
-  //   }, []);
-
-  //   const onTopChampSelectButtonClick = () => {
-  //     console.log("clicked");
-  //     // return <SelectChampion />;
-  //     setShowSelectChampion(true);
-  //   };
-
   const handleSelectedChampion = useCallback(
     (team: string, champion: Champion, position: string) => {
       console.log("champion in Parent Component", champion);
-      // setChampInfo(champion);
-
-      // if (team === "MyTeam") {
       const updateTeamChampInfo = teamChampsInfo.map((info) =>
         info.position === position && info.team === team
           ? { ...info, champion }
           : info,
       );
 
-      console.log("updateTeamChampInfo: ", updateTeamChampInfo);
       setTeamChampsInfo(updateTeamChampInfo);
-      console.log("teamChampsInfo: ", teamChampsInfo);
-
-      // }
-
-      // if (team === "Opponent") {
-      //   const updateTeamChampInfo = opponentTeamChampsInfo.map((info) =>
-      //     info.position === position && info.team === team
-      //       ? { ...info, champion }
-      //       : info,
-      //   );
-      //   setOpponentTeamChampsInfo(updateTeamChampInfo);
-      // }
     },
     [teamChampsInfo],
   );
@@ -112,111 +68,9 @@ const Strategy = () => {
               handleSelectedChampion(team, champion, position)
             }
             teamChampInfo={info}></ChampionCard>
-          {/* <Card sx={{ border: "none", boxShadow: "none" }}>
-            <CardContent>
-              <Typography variant="h6">{info.position}</Typography>
-              <Button
-                onClick={() => setShowSelectChampion(true)}
-                variant="contained"
-                style={{ maxWidth: "250px", maxHeight: "50px" }}>
-                Select Champion
-              </Button>
-              {showSelectChampion && (
-                <SelectChampion
-                  onClose={() => setShowSelectChampion(false)}
-                  onSelectChampion={(team, champion, position) =>
-                    handleSelectedChampion(team, champion, position)
-                  }
-                  champions={data}
-                  position={info.position}
-                  team={info.team}
-                />
-              )}
-            </CardContent>
-          </Card> */}
         </Grid>
       ))}
     </Grid>
-    // <>
-    //   {loading ? (
-    //     <h1>Loading for getting all champion info...</h1>
-    //   ) : (
-    //     data && (
-    //       <Grid container spacing={1} sx={{ p: 1 }}>
-    //         <Grid item xs={6}>
-    //           <h3>My Team</h3>
-    //           {myTeamChampsInfo.map((champInfo) => (
-    //             <Card sx={{ border: "none", boxShadow: "none" }}>
-    //               <CardContent>
-    //                 <Typography variant="h6" sx={{ paddingBottom: 1 }}>
-    //                   {champInfo.position}
-    //                 </Typography>
-    //                 {!!champInfo.champion ? (
-    //                   <ChampionInfo
-    //                     championId={champInfo.champion.id}
-    //                     versionNumber={champInfo.champion.version}
-    //                   />
-    //                 ) : (
-    //                   <Button
-    //                     onClick={onTopChampSelectButtonClick}
-    //                     variant="contained"
-    //                     style={{ maxWidth: "250px", maxHeight: "50px" }}>
-    //                     Select Champion
-    //                   </Button>
-    //                 )}
-    //                 {showSelectChampion && (
-    //                   <SelectChampion
-    //                     onClose={() => setShowSelectChampion(false)}
-    //                     onSelectChampion={handleSelectedChampion}
-    //                     champions={data}
-    //                     team={champInfo.team}
-    //                     position={champInfo.position}
-    //                   />
-    //                 )}
-    //               </CardContent>
-    //             </Card>
-    //           ))}
-    //         </Grid>
-
-    //         <Grid item xs={6}>
-    //           <h3>Opponent</h3>
-
-    //           {opponentTeamChampsInfo.map((champInfo) => (
-    //             <Card sx={{ border: "none", boxShadow: "none" }}>
-    //               <CardContent>
-    //                 <Typography variant="h6" sx={{ paddingBottom: 1 }}>
-    //                   {champInfo.position}
-    //                 </Typography>
-    //                 {!!champInfo.champion ? (
-    //                   <ChampionInfo
-    //                     championId={champInfo.champion.id}
-    //                     versionNumber={champInfo.champion.version}
-    //                   />
-    //                 ) : (
-    //                   <Button
-    //                     onClick={onTopChampSelectButtonClick}
-    //                     variant="contained"
-    //                     style={{ maxWidth: "250px", maxHeight: "50px" }}>
-    //                     Select Champion
-    //                   </Button>
-    //                 )}
-    //                 {showSelectChampion && (
-    //                   <SelectChampion
-    //                     onClose={() => setShowSelectChampion(false)}
-    //                     onSelectChampion={handleSelectedChampion}
-    //                     champions={data}
-    //                     team={champInfo.team}
-    //                     position={champInfo.position}
-    //                   />
-    //                 )}
-    //               </CardContent>
-    //             </Card>
-    //           ))}
-    //         </Grid>
-    //       </Grid>
-    //     )
-    //   )}
-    // </>
   );
 };
 

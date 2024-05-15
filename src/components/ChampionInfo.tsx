@@ -57,7 +57,7 @@ const ChampionInfo: FC<Props> = ({ championId, versionNumber }) => {
           <CardMedia
             component="img"
             sx={{ width: 48, height: 48, marginRight: 2 }} // Adjust sizing and margin as needed
-            image="/static/images/cards/live-from-space.jpg"
+            image={`https://ddragon.leagueoflegends.com/cdn/${versionNumber}/img/champion/${championInfo.image.full}`}
             alt="Live from space album cover"
           />
           <Typography variant="subtitle1">
@@ -78,13 +78,19 @@ const ChampionInfo: FC<Props> = ({ championId, versionNumber }) => {
                 return (
                   <SkillDetails
                     skill={skill}
+                    versionNumber={versionNumber}
                     skillType="Passive"
                     index={index}
                   />
                 );
               } else {
                 return (
-                  <SkillDetails skill={skill} skillType="Skill" index={index} />
+                  <SkillDetails
+                    skill={skill}
+                    skillType="Skill"
+                    versionNumber={versionNumber}
+                    index={index}
+                  />
                 );
               }
             },

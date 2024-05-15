@@ -14,13 +14,19 @@ interface Props {
   skill: Passive | Spell;
   index: number;
   skillType: string;
+  versionNumber: string;
 }
 
 // function isPassive(skill: Passive | Spell, skillType: string):skill is Passive{
 //     return skillType === "Passive"
 // }
 
-const SkillDetails: FC<Props> = ({ skill, skillType, index }) => {
+const SkillDetails: FC<Props> = ({
+  skill,
+  skillType,
+  index,
+  versionNumber,
+}) => {
   const [skillShortCut, setSkillShortCut] = useState("");
   useEffect(() => {
     switch (index) {
@@ -61,8 +67,12 @@ const SkillDetails: FC<Props> = ({ skill, skillType, index }) => {
       <Card sx={{ position: "relative", width: 80, height: 80 }}>
         <CardMedia
           component="img"
-          image="path_to_image.jpg" // 여기에 이미지 경로를 지정
-          alt="Skill Image"
+          image={
+            skillType === "Passive"
+              ? `https://ddragon.leagueoflegends.com/cdn/${versionNumber}/img/passive/${skill.image.full}`
+              : `https://ddragon.leagueoflegends.com/cdn/${versionNumber}/img/spell/${skill.image.full}`
+          } // 여기에 이미지 경로를 지정
+          alt={skill.name}
           sx={{ width: "100%", height: "100%" }}></CardMedia>
         <Box
           sx={{
