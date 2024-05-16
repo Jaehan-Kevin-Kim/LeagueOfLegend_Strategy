@@ -7,14 +7,16 @@ import {
   IconButton,
   Typography,
 } from "@mui/material";
-import { Passive, Spell } from "../../models/ChampionDetails";
+import { IPassive, ISpell } from "../../models/ChampionDetails";
 import { FC, useEffect, useState } from "react";
+import { useGetChampionInfo } from "../../store/ChampionStore";
 
 interface Props {
-  skill: Passive | Spell;
+  skill: IPassive | ISpell;
   index: number;
   skillType: string;
   versionNumber: string;
+  key: string;
 }
 
 // function isPassive(skill: Passive | Spell, skillType: string):skill is Passive{
@@ -27,7 +29,12 @@ const SkillDetails: FC<Props> = ({
   index,
   versionNumber,
 }) => {
+  const showSkillDetails = useGetChampionInfo(
+    (state) => state.showSkillDetails,
+  );
+
   const [skillShortCut, setSkillShortCut] = useState("");
+
   useEffect(() => {
     switch (index) {
       case 0:
@@ -49,11 +56,17 @@ const SkillDetails: FC<Props> = ({
   }, [index]);
 
   const replaceTemplatesAndTagsToQuestionMark = (input: string) => {
-    const noTemplates = input.replace(/{{[^{}]*}}/g, "?");
-    // "<...>" 매칭을 찾아 "?"로 대체하지만, 태그 내의 텍스트는 유지
-    const noTags = noTemplates.replace(/<[^>]*>([^<]*)<\/[^>]*>/g, "$1");
-    const noSelfClosingTags = noTags.replace(/<[^>]*\/>/g, "");
-    return noSelfClosingTags;
+    // const noTemplates = input.replace(/{{[^{}]*}}/g, "?");
+    // // "<...>" 매칭을 찾아 "?"로 대체하지만, 태그 내의 텍스트는 유지
+    // const noTags = noTemplates.replace(/<[^>]*>([^<]*)<\/[^>]*>/g, "$1");
+    // const noSelfClosingTags = noTags.replace(/<[^>]*\/>/g, "");
+    // return noSelfClosingTags;
+
+    const noTemplates = input.replace(/{{[^{}]*}}/g, "?"); // Replace template literals with '?'
+    // const noHtmlTags = noTemplates.replace(/<[^>]+>/g, ""); // Remove all HTML tags
+    const noHtmlTags = noTemplates.replace(/<\/?[^>]+(>|$)/g, "");
+
+    return noHtmlTags;
   };
 
   return (
@@ -64,7 +77,7 @@ const SkillDetails: FC<Props> = ({
         image="path_to_champion_image.jpg"
         alt="Champion"
       /> */}
-      <Card sx={{ position: "relative", width: 80, height: 80 }}>
+      <Card sx={{ position: "relative", width: 50, height: 50 }}>
         <CardMedia
           component="img"
           image={
@@ -89,36 +102,60 @@ const SkillDetails: FC<Props> = ({
         </Box>
       </Card>
       <CardContent sx={{ flex: "1", display: "flex", flexDirection: "column" }}>
+        {showSkillDetails && (
+          <Typography variant="body2" component="div">
+            {skill.name}
+          </Typography>
+        )}
         <Typography variant="body2" component="div">
-          {skill.name}
-        </Typography>
-        <Typography variant="body2" component="div">
-          •{skill.description}
+          •{replaceTemplatesAndTagsToQuestionMark(skill.description)}
         </Typography>
         {skillType !== "Passive" && (
           <>
-            <Typography variant="body2" component="div">
-              {/* {(skill as Spell).tooltip} */}•
-              {replaceTemplatesAndTagsToQuestionMark((skill as Spell).tooltip)}
-            </Typography>
-            <Typography variant="body2" component="div">
+            {showSkillDetails && (
+              <Typography variant="body2" component="div">
+                {/* {(skill as ISpell).tooltip} */}•
+                {replaceTemplatesAndTagsToQuestionMark(
+                  (skill as ISpell).tooltip,
+                )}
+              </Typography>
+            )}
+            <Typography variant="body2" component="div" sx={{ m: 0 }}>
               •Cool:
-              {(skill as Spell).cooldown.map((time, index, self) => {
-                if (index === self.length - 1) return <span> {time} </span>;
-                else {
-                  return <span> {time} / </span>;
-                }
-              })}
+              {(skill as ISpell).cooldown.map(
+                (time, index, self) => (
+                  <span key={index}>
+                    {time}
+                    {index === self.length - 1 ? "" : " / "}
+                  </span>
+                ),
+                //  {
+                //   if (index === self.length - 1) return <span> {time} </span>;
+                //   else {
+                //     return <span> {time} / </span>;
+                //   }
+                // }
+              )}
             </Typography>
-            <Typography variant="body2" component="div">
-              •Cost:
-              {(skill as Spell).cost.map((time, index, self) => {
-                if (index === self.length - 1) return <span> {time} </span>;
-                else {
-                  return <span> {time} / </span>;
-                }
-              })}
-            </Typography>
+            {showSkillDetails && (
+              <Typography variant="body2" component="div">
+                •Cost:
+                {(skill as ISpell).cost.map(
+                  (time, index, self) => (
+                    <span key={index}>
+                      {time}
+                      {index === self.length - 1 ? "" : " / "}
+                    </span>
+                  ),
+                  // {
+                  //   if (index === self.length - 1) return <span> {time} </span>;
+                  //   else {
+                  //     return <span> {time} / </span>;
+                  //   }
+                  // }
+                )}
+              </Typography>
+            )}
           </>
         )}
       </CardContent>

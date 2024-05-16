@@ -8,7 +8,7 @@ import {
 } from "@mui/material";
 import axios from "axios";
 import { FC, useEffect, useState } from "react";
-import { ChampionDetails, Info, Passive } from "../models/ChampionDetails";
+import { IChampionDetails, IInfo, IPassive } from "../models/ChampionDetails";
 import SkillDetails from "./SkillDetails";
 
 interface Props {
@@ -18,7 +18,7 @@ interface Props {
 }
 
 const ChampionInfo: FC<Props> = ({ championId, versionNumber }) => {
-  const [championInfo, setChampionInfo] = useState<ChampionDetails>();
+  const [championInfo, setChampionInfo] = useState<IChampionDetails>();
   useEffect(() => {
     // console.log("championInfo in Champion Component", championInfo);
     // if (!championInfo) {
@@ -77,6 +77,7 @@ const ChampionInfo: FC<Props> = ({ championId, versionNumber }) => {
               if (index === 0) {
                 return (
                   <SkillDetails
+                    key={skill.name}
                     skill={skill}
                     versionNumber={versionNumber}
                     skillType="Passive"
@@ -86,6 +87,7 @@ const ChampionInfo: FC<Props> = ({ championId, versionNumber }) => {
               } else {
                 return (
                   <SkillDetails
+                    key={skill.name}
                     skill={skill}
                     skillType="Skill"
                     versionNumber={versionNumber}

@@ -2,7 +2,7 @@ import axios from "axios";
 import React from "react";
 import { create } from "zustand";
 
-interface VerstionStore extends VersionState {
+interface VersionStore extends VersionState {
   getLatestVersion: () => Promise<void>;
 }
 
@@ -20,7 +20,7 @@ const initialState: VersionState = {
   success: false,
 };
 
-export const useVersionStore = create<VerstionStore>((set, get) => ({
+export const useVersionStore = create<VersionStore>((set, get) => ({
   ...initialState,
 
   getLatestVersion: async () => {

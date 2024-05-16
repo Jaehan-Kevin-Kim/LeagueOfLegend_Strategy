@@ -1,6 +1,6 @@
 import axios from "axios";
 import { create } from "zustand";
-import { Champion } from "../models/Champion";
+import { IChampion } from "../models/Champion";
 
 // const initialState = {
 //   // champion: any;
@@ -16,13 +16,15 @@ interface ChampionState {
   loading: boolean;
   success: boolean;
   error: boolean;
-  data: Champion[] | []; // 좀 더 구체적인 타입으로 변경 가능
+  data: IChampion[] | []; // 좀 더 구체적인 타입으로 변경 가능
   errorData: string | null;
+  showSkillDetails: boolean;
 }
 
 // 스토어의 메서드 및 상태를 포함하는 인터페이스 정의
 interface ChampionStore extends ChampionState {
   execute: (version: string) => Promise<void>;
+  changeShowSkillDetails: (value: boolean) => void;
 }
 
 const initialState: ChampionState = {
@@ -31,6 +33,7 @@ const initialState: ChampionState = {
   error: false,
   data: [],
   errorData: null,
+  showSkillDetails: true,
 };
 
 // export const useGetChampionInfo = create((set, get) => ({
@@ -45,7 +48,7 @@ export const useGetChampionInfo = create<ChampionStore>((set, get) => ({
       } = await axios.get(
         `https://ddragon.leagueoflegends.com/cdn/${version}/data/ko_KR/champion.json`,
       );
-      const championArray: Champion[] = Object.values(data);
+      const championArray: IChampion[] = Object.values(data);
 
       console.log("championArray: ", championArray);
       // championArray.filter(champion=>champion.championName.toLowerCase())
@@ -55,5 +58,9 @@ export const useGetChampionInfo = create<ChampionStore>((set, get) => ({
       console.error("Error in data fetch: ", err);
       set({ ...initialState, error: true, errorData: err.message });
     }
+  },
+
+  changeShowSkillDetails: (value: boolean) => {
+    set({ ...initialState, showSkillDetails: value });
   },
 }));

@@ -1,6 +1,7 @@
 export const BoxStyle = {
+  /*
   position: "absolute" as "absolute",
-  top: "40%",
+  top: "50%",
   left: "50%",
   transform: "translate(-50%, -50%)",
   //   width: "600",
@@ -8,7 +9,8 @@ export const BoxStyle = {
   maxheight: "80vh",
   //   width: "auto",
   width: "auto",
-  height: 800,
+  // height: 800,
+  height: "auto",
   overflow: "auto",
 
   // hegith: 600,
@@ -22,6 +24,23 @@ export const BoxStyle = {
   px: 1,
 
   pb: 10,
+  */
+
+  position: "absolute" as "absolute",
+  top: "50%",
+  left: "50%",
+  transform: "translate(-50%, -50%)",
+  maxWidth: "90vw",
+  maxHeight: "80vh",
+  minWidth: "700px",
+  width: "auto",
+  height: "auto",
+  overflow: "auto",
+  bgcolor: "background.paper",
+  border: "2px solid #000",
+  boxShadow: 24,
+  p: 2,
+  pb: 3,
 };
 
 export const CardStyle = {

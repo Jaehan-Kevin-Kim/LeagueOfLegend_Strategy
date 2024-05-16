@@ -1,24 +1,24 @@
-export interface ChampionDetails {
+export interface IChampionDetails {
   id: string;
   key: string;
   name: string;
   title: string;
-  image: Image;
-  skins: Skin[];
+  image: IImage;
+  skins: ISkin[];
   lore: string;
   blurb: string;
   allytips: string[];
   enemytips: string[];
   tags: string[];
   partype: string;
-  info: Info;
-  stats: Stats;
-  spells: Spell[];
-  passive: Passive;
+  info: IInfo;
+  stats: IStats;
+  spells: ISpell[];
+  passive: IPassive;
   recommended: any[];
 }
 
-export interface Image {
+export interface IImage {
   full: string;
   sprite: string;
   group: string;
@@ -28,21 +28,21 @@ export interface Image {
   h: number;
 }
 
-export interface Skin {
+export interface ISkin {
   id: string;
   num: number;
   name: string;
   chromas: boolean;
 }
 
-export interface Info {
+export interface IInfo {
   attack: number;
   defense: number;
   magic: number;
   difficulty: number;
 }
 
-export interface Stats {
+export interface IStats {
   hp: number;
   hpperlevel: number;
   mp: number;
@@ -65,12 +65,12 @@ export interface Stats {
   attackspeed: number;
 }
 
-export interface Spell {
+export interface ISpell {
   id: string;
   name: string;
   description: string;
   tooltip: string;
-  leveltip: LevelTip;
+  leveltip: ILevelTip;
   maxrank: number;
   cooldown: number[];
   cooldownBurn: string;
@@ -84,17 +84,17 @@ export interface Spell {
   maxammo: string;
   range: number[];
   rangeBurn: string;
-  image: Image;
+  image: IImage;
   resource: string;
 }
 
-export interface LevelTip {
+export interface ILevelTip {
   label: string[];
   effect: string[];
 }
 
-export interface Passive {
+export interface IPassive {
   name: string;
   description: string;
-  image: Image;
+  image: IImage;
 }

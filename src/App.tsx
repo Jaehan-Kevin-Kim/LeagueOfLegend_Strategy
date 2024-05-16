@@ -9,6 +9,9 @@ import "./App.css";
 import Strategy from "./pages/Strategy/index";
 import { useEffect } from "react";
 import { useVersionStore } from "./store/VersionStore";
+import Home from "./pages/Home";
+import { Container } from "@mui/material";
+import NavigationTabs from "./components/NavigationTabs";
 
 const App = () => {
   // const { latestVersion, getLatestVersion } = useVersionStore();
@@ -20,14 +23,20 @@ const App = () => {
 
   return (
     <Router>
+      {/* <Container maxWidth="xl"> */}
+      {/* <> */}
+      <NavigationTabs />
       <Routes>
         <Route path="/" element={<Navigate to="/strategy" />}></Route>
         <Route path="/strategy" element={<Strategy />} />
+        <Route path="/home" element={<Home />} />
         {/* <div className="App dark:bg-slate-800">
         <h1 className="text-3xl font-bold underline">Hello world!</h1>
         <h1>Hello World</h1>
       </div> */}
       </Routes>
+      {/* </Container> */}
+      {/* </> */}
     </Router>
   );
 };

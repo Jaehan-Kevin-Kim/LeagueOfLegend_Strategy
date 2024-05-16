@@ -1,4 +1,4 @@
-export interface ChampionStats {
+export interface IChampionStats {
   hp: number;
   hpperlevel: number;
   mp: number;
@@ -21,7 +21,7 @@ export interface ChampionStats {
   attackspeed: number;
 }
 
-export interface ChampionImage {
+export interface IChampionImage {
   full: string;
   sprite: string;
   group: string;
@@ -31,29 +31,29 @@ export interface ChampionImage {
   h: number;
 }
 
-export interface ChampionInfo {
+export interface IChampionInfo {
   attack: number;
   defense: number;
   magic: number;
   difficulty: number;
 }
 
-export interface Champion {
+export interface IChampion {
   version: string;
   id: string;
   key: string;
   name: string;
   title: string;
   blurb: string;
-  info: ChampionInfo;
-  image: ChampionImage;
+  info: IChampionInfo;
+  image: IChampionImage;
   tags: string[];
   partype: string;
-  stats: ChampionStats;
+  stats: IChampionStats;
 }
 
 // 각 챔피언의 데이터를 맵 형태로 정의합니다.
-// export interface Champions {
+// export interface IChampions {
 //   [key: string]: Champion;
 // }
 

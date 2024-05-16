@@ -9,7 +9,7 @@ import {
   Typography,
 } from "@mui/material";
 import React, { FC, useEffect, useState } from "react";
-import { Champion } from "../../models/Champion";
+import { IChampion } from "../../models/Champion";
 import { BoxStyle, CardMediaStyle, CardStyle, TypographyStyle } from "./styles";
 import useChampionStoreHook from "../../hooks/useChampionStoreHook";
 import { useGetChampionInfo } from "../../store/ChampionStore";
@@ -18,7 +18,7 @@ interface Props {
   onClose: () => void;
   onSelectChampion: (
     team: string,
-    champion: Champion,
+    champion: IChampion,
     position: string,
   ) => void;
   // champions: Champion[];
@@ -34,7 +34,7 @@ const SelectChampion: FC<Props> = ({
   position,
 }) => {
   const [searchText, setSearchText] = useState("");
-  const [filteredChampions, setFilteredChampions] = useState<Champion[]>([]);
+  const [filteredChampions, setFilteredChampions] = useState<IChampion[]>([]);
   const { data, loading, error } = useGetChampionInfo();
   // const executeGetChampionsWithVersion = useChampionStoreHook();
 
@@ -69,7 +69,7 @@ const SelectChampion: FC<Props> = ({
     setFilteredChampions(filteredChamps);
   };
 
-  const onClickChampion = (champion: Champion) => {
+  const onClickChampion = (champion: IChampion) => {
     console.log("champion clicked: ", champion);
     onSelectChampion(team, champion, position);
     onClose();

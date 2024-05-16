@@ -1,6 +1,6 @@
 import React, { FC, useCallback, useState } from "react";
 import { Button, Card, CardContent, Grid, Typography } from "@mui/material";
-import { Champion } from "../../models/Champion";
+import { IChampion } from "../../models/Champion";
 import { TeamChampInfo } from "../../pages/Strategy";
 import SelectChampion from "../SelectChampion";
 import ChampionInfo from "../ChampionInfo";
@@ -9,7 +9,7 @@ interface Props {
   onClose: () => void;
   onSelectChampion: (
     team: string,
-    champion: Champion,
+    champion: IChampion,
     position: string,
   ) => void;
   //   champions: Champion[];
@@ -26,7 +26,7 @@ const ChampionCard: FC<Props> = ({
   const [showSelectChampion, setShowSelectChampion] = useState(false);
 
   const handleSelectedChampion = useCallback(
-    (team: string, champion: Champion, position: string) => {
+    (team: string, champion: IChampion, position: string) => {
       onSelectChampion(team, champion, position);
       onClose();
     },
