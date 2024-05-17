@@ -1,6 +1,7 @@
 import axios from "axios";
 import { create } from "zustand";
-import { IChampion } from "../models/Champion";
+import { IChampion, ITeamChampInfo } from "../models/Champion";
+import { POSITIONS } from "../constants";
 
 // const initialState = {
 //   // champion: any;
@@ -18,14 +19,22 @@ interface ChampionState {
   error: boolean;
   data: IChampion[] | []; // 좀 더 구체적인 타입으로 변경 가능
   errorData: string | null;
-  showSkillDetails: boolean;
+  teamChampsInfo: ITeamChampInfo[];
+  // showSkillDetails: boolean;
 }
 
 // 스토어의 메서드 및 상태를 포함하는 인터페이스 정의
 interface ChampionStore extends ChampionState {
   execute: (version: string) => Promise<void>;
-  changeShowSkillDetails: (value: boolean) => void;
+  // changeShowSkillDetails: (value: boolean) => void;
 }
+
+const initializeTeamChampsInfo = () => {
+  return POSITIONS.flatMap((position) => [
+    { team: "MyTeam", champion: null, position },
+    { team: "Opponent", champion: null, position },
+  ]);
+};
 
 const initialState: ChampionState = {
   loading: false,
@@ -33,7 +42,8 @@ const initialState: ChampionState = {
   error: false,
   data: [],
   errorData: null,
-  showSkillDetails: true,
+  teamChampsInfo: initializeTeamChampsInfo(),
+  // showSkillDetails: true,
 };
 
 // export const useGetChampionInfo = create((set, get) => ({
@@ -60,7 +70,36 @@ export const useGetChampionInfo = create<ChampionStore>((set, get) => ({
     }
   },
 
-  changeShowSkillDetails: (value: boolean) => {
-    set({ ...initialState, showSkillDetails: value });
+  updateTeamChampsInfo: (
+    // teamChampsInfo: ITeamChampInfo[],
+    team: string,
+    champion: IChampion,
+    position: string,
+  ) => {
+    const currentTeamChampsInfo = get().teamChampsInfo;
+    const updatedTeamChampsInfo = currentTeamChampsInfo.map((info) =>
+      info.position === position && info.team === team
+        ? { ...info, champion }
+        : info,
+    );
+
+    set({ teamChampsInfo: updatedTeamChampsInfo });
   },
+
+  resetSpecificTeamChampsInfo: (team: string) => {
+    const currentTeamChampsInfo = get().teamChampsInfo;
+    const updatedTeamChampsInfo = currentTeamChampsInfo.map((info) =>
+      info.team === team ? { ...info, champion: null } : info,
+    );
+
+    set({ teamChampsInfo: updatedTeamChampsInfo });
+  },
+
+  resetAllTeamsChampsInfo: () => {
+    set({ teamChampsInfo: initialState.teamChampsInfo });
+  },
+
+  // changeShowSkillDetails: (value: boolean) => {
+  //   set({ ...initialState, showSkillDetails: value });
+  // },
 }));

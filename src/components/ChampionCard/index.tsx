@@ -1,9 +1,17 @@
-import React, { FC, useCallback, useState } from "react";
-import { Button, Card, CardContent, Grid, Typography } from "@mui/material";
+import {
+  Button,
+  Card,
+  CardContent,
+  Grid,
+  IconButton,
+  Typography,
+} from "@mui/material";
+import { FC, useCallback, useState } from "react";
 import { IChampion } from "../../models/Champion";
 import { TeamChampInfo } from "../../pages/Strategy";
-import SelectChampion from "../SelectChampion";
 import ChampionInfo from "../ChampionInfo";
+import SelectChampion from "../SelectChampion";
+import { Edit } from "@mui/icons-material";
 
 interface Props {
   onClose: () => void;
@@ -36,7 +44,24 @@ const ChampionCard: FC<Props> = ({
   return (
     <Card sx={{ border: "none", boxShadow: "none" }}>
       <CardContent>
-        <Typography variant="h6">{teamChampInfo.position}</Typography>
+        <Grid container alignItems="center">
+          <Grid item>
+            <Typography variant="h6">{teamChampInfo.position}</Typography>
+          </Grid>
+          {!!teamChampInfo.champion && (
+            <Grid item>
+              <IconButton
+                aria-label="edit"
+                size="small"
+                onClick={() => setShowSelectChampion(true)}
+                // variant="outlined"
+                // style={{ maxWidth: "250px" }}
+                sx={{ ml: 1 }}>
+                <Edit />
+              </IconButton>
+            </Grid>
+          )}
+        </Grid>
         {!!teamChampInfo.champion ? (
           <ChampionInfo
             championId={teamChampInfo.champion.id}

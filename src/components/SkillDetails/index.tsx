@@ -1,15 +1,7 @@
-import {
-  Box,
-  Card,
-  CardContent,
-  CardMedia,
-  Grid,
-  IconButton,
-  Typography,
-} from "@mui/material";
-import { IPassive, ISpell } from "../../models/ChampionDetails";
+import { Box, Card, CardContent, CardMedia, Typography } from "@mui/material";
 import { FC, useEffect, useState } from "react";
-import { useGetChampionInfo } from "../../store/ChampionStore";
+import { IPassive, ISpell } from "../../models/ChampionDetails";
+import { useOptionStore } from "../../store/OptionStore";
 
 interface Props {
   skill: IPassive | ISpell;
@@ -29,9 +21,10 @@ const SkillDetails: FC<Props> = ({
   index,
   versionNumber,
 }) => {
-  const showSkillDetails = useGetChampionInfo(
-    (state) => state.showSkillDetails,
-  );
+  // const showOptions.showSkillDetails = useGetChampionInfo(
+  //   (state) => state.showOptions.showSkillDetails,
+  // );
+  const showOptions = useOptionStore((state) => state.options);
 
   const [skillShortCut, setSkillShortCut] = useState("");
 
@@ -102,17 +95,19 @@ const SkillDetails: FC<Props> = ({
         </Box>
       </Card>
       <CardContent sx={{ flex: "1", display: "flex", flexDirection: "column" }}>
-        {showSkillDetails && (
+        {(showOptions.showSkillDetails || showOptions.minimumView) && (
           <Typography variant="body2" component="div">
             {skill.name}
           </Typography>
         )}
-        <Typography variant="body2" component="div">
-          •{replaceTemplatesAndTagsToQuestionMark(skill.description)}
-        </Typography>
+        {!showOptions.minimumView && (
+          <Typography variant="body2" component="div">
+            •{replaceTemplatesAndTagsToQuestionMark(skill.description)}
+          </Typography>
+        )}
         {skillType !== "Passive" && (
           <>
-            {showSkillDetails && (
+            {showOptions.showSkillDetails && !showOptions.minimumView && (
               <Typography variant="body2" component="div">
                 {/* {(skill as ISpell).tooltip} */}•
                 {replaceTemplatesAndTagsToQuestionMark(
@@ -122,22 +117,14 @@ const SkillDetails: FC<Props> = ({
             )}
             <Typography variant="body2" component="div" sx={{ m: 0 }}>
               •Cool:
-              {(skill as ISpell).cooldown.map(
-                (time, index, self) => (
-                  <span key={index}>
-                    {time}
-                    {index === self.length - 1 ? "" : " / "}
-                  </span>
-                ),
-                //  {
-                //   if (index === self.length - 1) return <span> {time} </span>;
-                //   else {
-                //     return <span> {time} / </span>;
-                //   }
-                // }
-              )}
+              {(skill as ISpell).cooldown.map((time, index, self) => (
+                <span key={index}>
+                  {time}
+                  {index === self.length - 1 ? "" : " / "}
+                </span>
+              ))}
             </Typography>
-            {showSkillDetails && (
+            {showOptions.showSkillDetails && !showOptions.minimumView && (
               <Typography variant="body2" component="div">
                 •Cost:
                 {(skill as ISpell).cost.map(

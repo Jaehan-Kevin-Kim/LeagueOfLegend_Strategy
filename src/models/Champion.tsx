@@ -52,6 +52,12 @@ export interface IChampion {
   stats: IChampionStats;
 }
 
+export interface ITeamChampInfo {
+  team: string;
+  champion: IChampion | null;
+  position: string;
+}
+
 // 각 챔피언의 데이터를 맵 형태로 정의합니다.
 // export interface IChampions {
 //   [key: string]: Champion;

@@ -6,15 +6,17 @@ import {
 } from "react-router-dom";
 import "./App.css";
 // import './pages/strategy'
-import Strategy from "./pages/Strategy/index";
-import { useEffect } from "react";
-import { useVersionStore } from "./store/VersionStore";
-import Home from "./pages/Home";
-import { Container } from "@mui/material";
+import { Box } from "@mui/system";
+import { useEffect, useState } from "react";
 import NavigationTabs from "./components/NavigationTabs";
+import SettingsComponent from "./components/SettingsComponent";
+import Home from "./pages/Home";
+import Strategy from "./pages/Strategy/index";
+import { useVersionStore } from "./store/VersionStore";
 
 const App = () => {
   // const { latestVersion, getLatestVersion } = useVersionStore();
+
   const getLatestVersion = useVersionStore((state) => state.getLatestVersion);
 
   useEffect(() => {
@@ -25,7 +27,15 @@ const App = () => {
     <Router>
       {/* <Container maxWidth="xl"> */}
       {/* <> */}
-      <NavigationTabs />
+      <Box
+        sx={{
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
+        }}>
+        <NavigationTabs />
+        <SettingsComponent />
+      </Box>
       <Routes>
         <Route path="/" element={<Navigate to="/strategy" />}></Route>
         <Route path="/strategy" element={<Strategy />} />

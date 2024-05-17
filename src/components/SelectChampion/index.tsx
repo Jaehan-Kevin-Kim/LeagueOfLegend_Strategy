@@ -41,9 +41,6 @@ const SelectChampion: FC<Props> = ({
   // const [championName, setChampionName] = useState("");
   useEffect(() => {
     // executeGetChampionsWithVersion();
-
-    console.log("open select champion");
-    console.log("champion Info: ", data);
     setFilteredChampions(data);
     // }, [onClose, champions]);
   }, [data]);
@@ -70,7 +67,9 @@ const SelectChampion: FC<Props> = ({
   };
 
   const onClickChampion = (champion: IChampion) => {
-    console.log("champion clicked: ", champion);
+    // console.log("champion clicked: ", champion);
+    // console.log("team in select champion: ", team);
+
     onSelectChampion(team, champion, position);
     onClose();
   };

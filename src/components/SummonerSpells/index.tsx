@@ -13,7 +13,7 @@ const SummonerSpells = () => {
   }, [getSummonerSpellsWithVersion]);
 
   return (
-    <>
+    <div style={{ marginTop: "15px", width: "100%" }}>
       {loading ? (
         <Typography variant="h4">Loading Summoner Spells...</Typography>
       ) : (
@@ -33,7 +33,7 @@ const SummonerSpells = () => {
           </Grid>
         )
       )}
-    </>
+    </div>
   );
 };
 

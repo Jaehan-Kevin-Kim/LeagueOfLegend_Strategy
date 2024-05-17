@@ -1,0 +1,1 @@
+export const POSITIONS = ["TOP", "JG", "MID", "ADC", "SUPP"];
