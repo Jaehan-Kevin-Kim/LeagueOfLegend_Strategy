@@ -84,11 +84,12 @@ const Strategy = () => {
 
   return (
     <>
-      {/* <NavigationTabs /> */}
       <Grid container spacing={1} sx={{ p: 1 }}>
         <Grid container spacing={1} sx={{ p: 1 }}>
           <Grid item xs={11}>
+            {/* temporarily comment out below spell information
             <SummonerSpells></SummonerSpells>
+             */}
           </Grid>
           <Grid item xs={1}>
             <FormGroup>
@@ -104,6 +105,7 @@ const Strategy = () => {
             </FormGroup>
           </Grid>
         </Grid>
+
         {teamChampsInfo.map((info, index) => (
           <Grid item xs={6} key={index}>
             {index === 0 && <h3>My Team</h3>}
