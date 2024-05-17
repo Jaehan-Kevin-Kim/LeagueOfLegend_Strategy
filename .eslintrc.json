@@ -2,7 +2,6 @@
   "env": {
     "browser": true,
     "node": true,
-    "es2021": true,
-    "CI": false
+    "es2021": true
   }
 }
