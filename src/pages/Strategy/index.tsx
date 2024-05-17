@@ -1,12 +1,13 @@
 import { useCallback, useEffect, useState } from "react";
 
 import ChampionCard from "../../components/ChampionCard";
-import { Grid } from "@mui/material";
+import { Button, Grid } from "@mui/material";
 import useChampionStoreHook from "../../hooks/useChampionStoreHook";
 import { IChampion } from "../../models/Champion";
 // import { Button } from "@headlessui/react";
 import useSummonerSpellStoreHook from "../../hooks/useSummonerSpellStoreHook";
 import { useOptionStore } from "../../store/OptionStore";
+import { useGetChampionInfo } from "../../store/ChampionStore";
 
 const positions = ["TOP", "JG", "MID", "ADC", "SUPP"];
 
@@ -25,6 +26,8 @@ const Strategy = () => {
   //     TeamChampInfo[]
   //   >([]);
   const getSummonerSpellsWithVersion = useSummonerSpellStoreHook();
+  const { updateTeamChampsInfo, resetSpecificTeamChampsInfo, teamChampsInfo } =
+    useGetChampionInfo();
   const { options } = useOptionStore();
   // const [teamChampsInfo, setTeamChampsInfo] = useState<TeamChampInfo[]>([]);
   const [myTeamChampsInfo, setMyTeamChampsInfo] = useState<TeamChampInfo[]>([]);
@@ -75,6 +78,27 @@ const Strategy = () => {
 
   const handleSelectedChampion = useCallback(
     (team: string, champion: IChampion, position: string) => {
+      /*
+      // 이거는 store에서 champ information 관리하는 코드임. 화욜에 와서 아래 code comment 풀기
+      updateTeamChampsInfo({ team, champion, position });
+
+      if (team === "MyTeam") {
+        const myTeamChampList = teamChampsInfo.filter(
+          (info) => info.team === team,
+        );
+        setMyTeamChampsInfo(myTeamChampList);
+      }
+
+      if (team === "Opponent") {
+        const opponentTeamChampList = teamChampsInfo.filter(
+          (info) => info.team === team,
+        );
+        setOpponentTeamChampsInfo(opponentTeamChampList);
+      }
+
+      //
+      */
+
       if (team === "MyTeam") {
         const updatedTeamChampInfo = updateTeamChampInfo(
           myTeamChampsInfo,
@@ -93,7 +117,15 @@ const Strategy = () => {
         setOpponentTeamChampsInfo(updatedTeamChampInfo);
       }
     },
-    [myTeamChampsInfo, opponentTeamChampsInfo],
+    [myTeamChampsInfo, opponentTeamChampsInfo, teamChampsInfo],
+  );
+
+  const onClickClearTeam = useCallback(
+    (team: string) => () => {
+      resetSpecificTeamChampsInfo(team);
+      // console.log("clear team: ", team /*  */);
+    },
+    [],
   );
 
   return (
@@ -104,7 +136,24 @@ const Strategy = () => {
 
         {options.showMyTeam && (
           <Grid item xs={options.showOpponent ? 6 : 12}>
-            <h3 style={{ marginBottom: 0 }}>My Team</h3>
+            <Grid
+              container
+              justifyContent="start"
+              alignItems="center"
+              sx={{ mb: 0, pb: 0, height: 45 }}>
+              <Grid item>
+                <h3>My Team</h3>
+              </Grid>
+              <Grid item>
+                <Button
+                  size="small"
+                  style={{ marginLeft: 150 }}
+                  variant="outlined"
+                  onClick={onClickClearTeam("MyTeam")}>
+                  Clear
+                </Button>
+              </Grid>
+            </Grid>
             <Grid container direction="column">
               {myTeamChampsInfo.map((info, index) => (
                 <Grid item key={index} xs={12}>
@@ -122,7 +171,24 @@ const Strategy = () => {
 
         {options.showOpponent && (
           <Grid item xs={options.showMyTeam ? 6 : 12}>
-            <h3 style={{ marginBottom: 0 }}>Opponent</h3>
+            <Grid
+              container
+              justifyContent="start"
+              alignItems="center"
+              sx={{ mb: 0, pb: 0, height: 45 }}>
+              <Grid item>
+                <h3>Opponent</h3>
+              </Grid>
+              <Grid item>
+                <Button
+                  onClick={onClickClearTeam("Opponent")}
+                  size="small"
+                  style={{ marginLeft: 150 }}
+                  variant="outlined">
+                  Clear
+                </Button>
+              </Grid>
+            </Grid>
             <Grid container direction="column">
               {opponentTeamChampsInfo.map((info, index) => (
                 <Grid item key={index} xs={12}>

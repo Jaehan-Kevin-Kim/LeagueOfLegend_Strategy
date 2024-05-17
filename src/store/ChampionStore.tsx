@@ -26,6 +26,9 @@ interface ChampionState {
 // 스토어의 메서드 및 상태를 포함하는 인터페이스 정의
 interface ChampionStore extends ChampionState {
   execute: (version: string) => Promise<void>;
+  updateTeamChampsInfo: (teamChampInfo: ITeamChampInfo) => void;
+  resetSpecificTeamChampsInfo: (team: string) => void;
+  resetAllTeamsChampsInfo: () => void;
   // changeShowSkillDetails: (value: boolean) => void;
 }
 
@@ -71,15 +74,17 @@ export const useGetChampionInfo = create<ChampionStore>((set, get) => ({
   },
 
   updateTeamChampsInfo: (
+    teamChampInfo: ITeamChampInfo,
     // teamChampsInfo: ITeamChampInfo[],
-    team: string,
-    champion: IChampion,
-    position: string,
+    // team: string,
+    // champion: IChampion,
+    // position: string,
   ) => {
     const currentTeamChampsInfo = get().teamChampsInfo;
     const updatedTeamChampsInfo = currentTeamChampsInfo.map((info) =>
-      info.position === position && info.team === team
-        ? { ...info, champion }
+      info.position === teamChampInfo.position &&
+      info.team === teamChampInfo.team
+        ? { ...info, champion: teamChampInfo.champion }
         : info,
     );
 
