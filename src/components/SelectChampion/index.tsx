@@ -13,6 +13,7 @@ import { IChampion } from "../../models/Champion";
 import { BoxStyle, CardMediaStyle, CardStyle, TypographyStyle } from "./styles";
 import useChampionStoreHook from "../../hooks/useChampionStoreHook";
 import { useGetChampionInfo } from "../../store/ChampionStore";
+import { useOptionStore } from "../../store/OptionStore";
 
 interface Props {
   onClose: () => void;
@@ -36,6 +37,7 @@ const SelectChampion: FC<Props> = ({
   const [searchText, setSearchText] = useState("");
   const [filteredChampions, setFilteredChampions] = useState<IChampion[]>([]);
   const { data, loading, error } = useGetChampionInfo();
+
   // const executeGetChampionsWithVersion = useChampionStoreHook();
 
   // const [championName, setChampionName] = useState("");

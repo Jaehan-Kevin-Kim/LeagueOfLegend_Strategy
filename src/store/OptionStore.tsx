@@ -15,6 +15,7 @@ const initialState: OptionState = {
     showSkillDetails: true,
     showMyTeam: true,
     showOpponent: true,
+    testMode: false,
   },
 };
 

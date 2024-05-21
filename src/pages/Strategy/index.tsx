@@ -3,7 +3,7 @@ import { useCallback, useEffect, useState } from "react";
 import ChampionCard from "../../components/ChampionCard";
 import { Button, Grid } from "@mui/material";
 import useChampionStoreHook from "../../hooks/useChampionStoreHook";
-import { IChampion } from "../../models/Champion";
+import { IChampion, ITeamChampInfo } from "../../models/Champion";
 // import { Button } from "@headlessui/react";
 import useSummonerSpellStoreHook from "../../hooks/useSummonerSpellStoreHook";
 import { useOptionStore } from "../../store/OptionStore";
@@ -49,56 +49,71 @@ const Strategy = () => {
     ]);
     setTeamChampsInfo(initialChampsInfo);
     */
-    const myTeamChampsInfo = positions.map((position) => ({
-      team: "MyTeam",
-      champion: null,
-      position,
-    }));
-    const opponentTeamChampsInfo = positions.map((position) => ({
-      team: "Opponent",
-      champion: null,
-      position,
-    }));
+    // const myTeamChampsInfo = positions.map((position) => ({
+    //   team: "MyTeam",
+    //   champion: null,
+    //   position,
+    // }));
+    // const opponentTeamChampsInfo = positions.map((position) => ({
+    //   team: "Opponent",
+    //   champion: null,
+    //   position,
+    // }));
 
-    setMyTeamChampsInfo(myTeamChampsInfo);
-    setOpponentTeamChampsInfo(opponentTeamChampsInfo);
-  }, [executeGetChampionsWithVersion, getSummonerSpellsWithVersion]);
+    // setMyTeamChampsInfo(myTeamChampsInfo);
+    // setOpponentTeamChampsInfo(opponentTeamChampsInfo);
+  }, [
+    executeGetChampionsWithVersion,
+    getSummonerSpellsWithVersion,
+    // teamChampsInfo,
+  ]);
 
-  const updateTeamChampInfo = (
-    teamChampsInfo: TeamChampInfo[],
-    champion: IChampion,
-    position: string,
-  ): TeamChampInfo[] => {
-    const updatedTeamChampInfo = teamChampsInfo.map((info) =>
-      info.position === position ? { ...info, champion } : info,
-    );
+  useEffect(() => {
+    console.log("call useEffect changing teamChampsInfo");
+    console.log("teamChampsInfo in useeffect", teamChampsInfo);
 
-    return updatedTeamChampInfo;
-  };
+    occupyTeamChampsInfo(teamChampsInfo);
+  }, [teamChampsInfo]);
+
+  // const updateTeamChampInfo = (
+  //   teamChampsInfo: TeamChampInfo[],
+  //   champion: IChampion,
+  //   position: string,
+  // ): TeamChampInfo[] => {
+  //   const updatedTeamChampInfo = teamChampsInfo.map((info) =>
+  //     info.position === position ? { ...info, champion } : info,
+  //   );
+
+  //   return updatedTeamChampInfo;
+  // };
 
   const handleSelectedChampion = useCallback(
     (team: string, champion: IChampion, position: string) => {
-      /*
       // 이거는 store에서 champ information 관리하는 코드임. 화욜에 와서 아래 code comment 풀기
+      // updateTeamChampsInfo({ team, champion, position });
+      // callUpdateChampsInfo(team, champion, position);
+
       updateTeamChampsInfo({ team, champion, position });
 
-      if (team === "MyTeam") {
-        const myTeamChampList = teamChampsInfo.filter(
-          (info) => info.team === team,
-        );
-        setMyTeamChampsInfo(myTeamChampList);
-      }
+      // if (team === "MyTeam") {
+      //   const myTeamChampList = teamChampsInfo.filter(
+      //     (info) => info.team === team,
+      //   );
+      //   setMyTeamChampsInfo(myTeamChampList);
+      // }
 
-      if (team === "Opponent") {
-        const opponentTeamChampList = teamChampsInfo.filter(
-          (info) => info.team === team,
-        );
-        setOpponentTeamChampsInfo(opponentTeamChampList);
-      }
+      // if (team === "Opponent") {
+      //   const opponentTeamChampList = teamChampsInfo.filter(
+      //     (info) => info.team === team,
+      //   );
+      //   setOpponentTeamChampsInfo(opponentTeamChampList);
+      // }
 
       //
-      */
 
+      /*
+
+      
       if (team === "MyTeam") {
         const updatedTeamChampInfo = updateTeamChampInfo(
           myTeamChampsInfo,
@@ -107,7 +122,7 @@ const Strategy = () => {
         );
         setMyTeamChampsInfo(updatedTeamChampInfo);
       }
-
+      
       if (team === "Opponent") {
         const updatedTeamChampInfo = updateTeamChampInfo(
           opponentTeamChampsInfo,
@@ -116,8 +131,39 @@ const Strategy = () => {
         );
         setOpponentTeamChampsInfo(updatedTeamChampInfo);
       }
+      */
     },
-    [myTeamChampsInfo, opponentTeamChampsInfo, teamChampsInfo],
+    [],
+  );
+
+  // const callUpdateChampsInfo = useCallback(
+  //   (team: string, champion: IChampion, position: string) => {
+  //     updateTeamChampsInfo({ team, champion, position });
+  //   },
+  //   [teamChampsInfo, updateTeamChampsInfo],
+  // );
+
+  // setMyTeamChampsInfo(myTeamChampsInfo);
+  // setOpponentTeamChampsInfo(opponentTeamChampsInfo);
+  const occupyTeamChampsInfo = useCallback(
+    (teamChampsInfo: ITeamChampInfo[]) => {
+      // if (team === "MyTeam") {
+      const myTeamChampList = teamChampsInfo.filter(
+        (info) => info.team === "MyTeam",
+      );
+      setMyTeamChampsInfo(myTeamChampList);
+      // }
+
+      // if (team === "Opponent") {
+      const opponentTeamChampList = teamChampsInfo.filter(
+        (info) => info.team === "Opponent",
+      );
+      setOpponentTeamChampsInfo(opponentTeamChampList);
+      // }
+      // setMyTeamChampsInfo(myTeamChampsInfo);
+      // setOpponentTeamChampsInfo(opponentTeamChampsInfo);
+    },
+    [],
   );
 
   const onClickClearTeam = useCallback(

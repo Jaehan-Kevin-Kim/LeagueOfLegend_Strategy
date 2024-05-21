@@ -98,6 +98,18 @@ const SettingsComponent = () => {
               // labelPlacement="end"
               label="Show Opponent"></FormControlLabel>
           </MenuItem>
+          <MenuItem>
+            <FormControlLabel
+              control={
+                <Switch
+                  name="testMode"
+                  checked={options.testMode}
+                  onChange={onChangeOptionSwitch}
+                />
+              }
+              // labelPlacement="end"
+              label="Test mode"></FormControlLabel>
+          </MenuItem>
         </FormGroup>
       </Menu>
     </>

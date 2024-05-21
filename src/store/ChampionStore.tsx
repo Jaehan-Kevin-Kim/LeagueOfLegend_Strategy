@@ -63,7 +63,7 @@ export const useGetChampionInfo = create<ChampionStore>((set, get) => ({
       );
       const championArray: IChampion[] = Object.values(data);
 
-      console.log("championArray: ", championArray);
+      // console.log("championArray: ", championArray);
       // championArray.filter(champion=>champion.championName.toLowerCase())
 
       set({ ...initialState, success: true, data: championArray });
@@ -89,6 +89,7 @@ export const useGetChampionInfo = create<ChampionStore>((set, get) => ({
     );
 
     set({ teamChampsInfo: updatedTeamChampsInfo });
+    // console.log("updatedTeamChampsInfo: ", get().teamChampsInfo);
   },
 
   resetSpecificTeamChampsInfo: (team: string) => {

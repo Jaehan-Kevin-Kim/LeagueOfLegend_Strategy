@@ -32,7 +32,7 @@ export const useSummonerSpellStore = create<SummonerSpellStore>((set, get) => ({
         `https://ddragon.leagueoflegends.com/cdn/${version}/data/en_US/summoner.json`,
       );
 
-      console.log("data for summoner spell: ", data);
+      // console.log("data for summoner spell: ", data);
       const spellArray: ISummonerSpell[] = Object.values(data);
       set({
         ...initialState,

@@ -74,7 +74,9 @@ const SkillDetails: FC<Props> = ({
         <CardMedia
           component="img"
           image={
-            skillType === "Passive"
+            showOptions.testMode
+              ? ""
+              : skillType === "Passive"
               ? `https://ddragon.leagueoflegends.com/cdn/${versionNumber}/img/passive/${skill.image.full}`
               : `https://ddragon.leagueoflegends.com/cdn/${versionNumber}/img/spell/${skill.image.full}`
           } // 여기에 이미지 경로를 지정

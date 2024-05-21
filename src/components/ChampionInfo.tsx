@@ -10,6 +10,7 @@ import axios from "axios";
 import { FC, useEffect, useState } from "react";
 import { IChampionDetails, IInfo, IPassive } from "../models/ChampionDetails";
 import SkillDetails from "./SkillDetails";
+import { useOptionStore } from "../store/OptionStore";
 
 interface Props {
   // championInfo: any;
@@ -19,6 +20,7 @@ interface Props {
 
 const ChampionInfo: FC<Props> = ({ championId, versionNumber }) => {
   const [championInfo, setChampionInfo] = useState<IChampionDetails>();
+  const { testMode } = useOptionStore((state) => state.options);
   useEffect(() => {
     // console.log("championInfo in Champion Component", championInfo);
     // if (!championInfo) {
@@ -57,7 +59,11 @@ const ChampionInfo: FC<Props> = ({ championId, versionNumber }) => {
           <CardMedia
             component="img"
             sx={{ width: 48, height: 48, marginRight: 2 }} // Adjust sizing and margin as needed
-            image={`https://ddragon.leagueoflegends.com/cdn/${versionNumber}/img/champion/${championInfo.image.full}`}
+            image={
+              testMode
+                ? ""
+                : `https://ddragon.leagueoflegends.com/cdn/${versionNumber}/img/champion/${championInfo.image.full}`
+            }
             alt="Live from space album cover"
           />
           <Typography variant="subtitle1">
