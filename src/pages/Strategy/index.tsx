@@ -8,6 +8,7 @@ import { IChampion, ITeamChampInfo } from "../../models/Champion";
 import useSummonerSpellStoreHook from "../../hooks/useSummonerSpellStoreHook";
 import { useOptionStore } from "../../store/OptionStore";
 import { useGetChampionInfo } from "../../store/ChampionStore";
+import SummonerSpells from "../../components/SummonerSpells";
 
 const positions = ["TOP", "JG", "MID", "ADC", "SUPP"];
 
@@ -178,7 +179,7 @@ const Strategy = () => {
     <>
       <Grid container spacing={1} sx={{ p: 1 }}>
         {/* temporarily comment out below spell information */}
-        {/* <SummonerSpells></SummonerSpells> */}
+        {options.showSpells && <SummonerSpells></SummonerSpells>}
 
         {options.showMyTeam && (
           <Grid item xs={options.showOpponent ? 6 : 12}>

@@ -4,5 +4,6 @@ export interface IOptions {
   showSkillDetails: boolean;
   showMyTeam: boolean;
   showOpponent: boolean;
+  showSpells: boolean;
   testMode: boolean;
 }

@@ -7,11 +7,13 @@ import {
 import "./App.css";
 // import './pages/strategy'
 import { Box } from "@mui/system";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import NavigationTabs from "./components/NavigationTabs";
 import SettingsComponent from "./components/SettingsComponent";
 import Home from "./pages/Home";
 import Strategy from "./pages/Strategy/index";
+import TimerComponent from "./components/Timer";
+
 import { useVersionStore } from "./store/VersionStore";
 
 const App = () => {
@@ -31,10 +33,20 @@ const App = () => {
         sx={{
           display: "flex",
           justifyContent: "space-between",
+          // justifyContent: "center",
           alignItems: "center",
+          width: "100%",
         }}>
-        <NavigationTabs />
-        <SettingsComponent />
+        <Box sx={{ flex: 1 }}>
+          <NavigationTabs />
+        </Box>
+        <Box sx={{ flex: 0 }}>
+          <TimerComponent />
+        </Box>
+        <Box sx={{ flex: 1, display: "flex", justifyContent: "flex-end" }}>
+          <SettingsComponent />
+        </Box>
+        {/* </Box> */}
       </Box>
       <Routes>
         <Route path="/" element={<Navigate to="/strategy" />}></Route>

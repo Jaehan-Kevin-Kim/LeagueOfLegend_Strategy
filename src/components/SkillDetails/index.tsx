@@ -31,15 +31,29 @@ const SkillDetails: FC<Props> = ({
   useEffect(() => {
     switch (index) {
       case 0:
-        setSkillShortCut("P");
+        !showOptions.minimumView
+          ? setSkillShortCut("P")
+          : setSkillShortCut("Q");
         break;
       case 1:
-        setSkillShortCut("Q");
+        !showOptions.minimumView
+          ? setSkillShortCut("Q")
+          : setSkillShortCut("W");
+
+        // setSkillShortCut("Q");
         break;
       case 2:
-        setSkillShortCut("W");
+        !showOptions.minimumView
+          ? setSkillShortCut("W")
+          : setSkillShortCut("E");
+
+        // setSkillShortCut("W");
         break;
       case 3:
+        !showOptions.minimumView
+          ? setSkillShortCut("E")
+          : setSkillShortCut("R");
+
         setSkillShortCut("E");
         break;
       case 4:
@@ -63,40 +77,61 @@ const SkillDetails: FC<Props> = ({
   };
 
   return (
-    <Card sx={{ display: "flex", maxWidth: 2048, alignItems: "center" }}>
+    <Card
+      sx={{
+        display: "flex",
+        maxWidth: 2048,
+        alignItems: "center",
+      }}>
       {/* <CardMedia
         component="img"
         sx={{ width: 151 }} // 챔피언 이미지 크기 설정
         image="path_to_champion_image.jpg"
         alt="Champion"
       /> */}
-      <Card sx={{ position: "relative", width: 50, height: 50 }}>
-        <CardMedia
-          component="img"
-          image={
-            showOptions.testMode
-              ? ""
-              : skillType === "Passive"
-              ? `https://ddragon.leagueoflegends.com/cdn/${versionNumber}/img/passive/${skill.image.full}`
-              : `https://ddragon.leagueoflegends.com/cdn/${versionNumber}/img/spell/${skill.image.full}`
-          } // 여기에 이미지 경로를 지정
-          alt={skill.name}
-          sx={{ width: "100%", height: "100%" }}></CardMedia>
-        <Box
-          sx={{
-            position: "absolute",
-            bottom: 0,
-            right: 0,
-            bgcolor: "rgba(0, 0, 0, 0.7)", // 배경 색상과 투명도 조정
-            color: "white",
-            padding: "2px 4px",
-            fontSize: "0.75rem",
-            borderTopLeftRadius: 4, // 상단 왼쪽 모서리만 둥글게
-          }}>
-          {skillShortCut}
-        </Box>
-      </Card>
-      <CardContent sx={{ flex: "1", display: "flex", flexDirection: "column" }}>
+
+      {!showOptions.minimumView ? (
+        <Card sx={{ position: "relative", width: 50, height: 50 }}>
+          <CardMedia
+            component="img"
+            image={
+              showOptions.testMode
+                ? ""
+                : skillType === "Passive"
+                ? `https://ddragon.leagueoflegends.com/cdn/${versionNumber}/img/passive/${skill.image.full}`
+                : `https://ddragon.leagueoflegends.com/cdn/${versionNumber}/img/spell/${skill.image.full}`
+            } // 여기에 이미지 경로를 지정
+            alt={skill.name}
+            sx={{ width: "100%", height: "100%" }}></CardMedia>
+          <Box
+            sx={{
+              position: "absolute",
+              bottom: 0,
+              right: 0,
+              bgcolor: "rgba(0, 0, 0, 0.7)", // 배경 색상과 투명도 조정
+              color: "white",
+              padding: "2px 4px",
+              fontSize: "0.75rem",
+              borderTopLeftRadius: 4, // 상단 왼쪽 모서리만 둥글게
+            }}>
+            {skillShortCut}
+          </Box>
+        </Card>
+      ) : (
+        <Typography sx={{ pl: 2 }}>{skillShortCut}</Typography>
+      )}
+      <CardContent
+        sx={{
+          flex: "1",
+          display: "flex",
+          flexDirection: "column",
+          // my: 0,
+          // py: 0,
+          py: showOptions.minimumView ? 1 : "auto", // 전체 패딩을 0으로 설정
+          "&:last-child": {
+            pb: showOptions.minimumView ? 1 : "auto", // MUI는 마지막 CardContent에 패딩을 추가하는데, 이를 제거합니다.
+          },
+        }}>
         {(showOptions.showSkillDetails || showOptions.minimumView) && (
           <Typography variant="body2" component="div">
             {skill.name}
@@ -117,7 +152,7 @@ const SkillDetails: FC<Props> = ({
                 )}
               </Typography>
             )}
-            <Typography variant="body2" component="div" sx={{ m: 0 }}>
+            <Typography variant="body2" component="div" sx={{ my: 0, py: 0 }}>
               •Cool:
               {(skill as ISpell).cooldown.map((time, index, self) => (
                 <span key={index}>
@@ -127,7 +162,7 @@ const SkillDetails: FC<Props> = ({
               ))}
             </Typography>
             {showOptions.showSkillDetails && !showOptions.minimumView && (
-              <Typography variant="body2" component="div">
+              <Typography variant="body2" component="div" sx={{ my: 0, py: 0 }}>
                 •Cost:
                 {(skill as ISpell).cost.map(
                   (time, index, self) => (
