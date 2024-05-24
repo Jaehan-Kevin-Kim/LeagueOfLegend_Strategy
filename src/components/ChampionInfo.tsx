@@ -4,6 +4,7 @@ import {
   AccordionDetails,
   AccordionSummary,
   CardMedia,
+  IconButton,
   Typography,
 } from "@mui/material";
 import axios from "axios";
@@ -11,14 +12,20 @@ import { FC, useEffect, useState } from "react";
 import { IChampionDetails, IInfo, IPassive } from "../models/ChampionDetails";
 import SkillDetails from "./SkillDetails";
 import { useOptionStore } from "../store/OptionStore";
+import { Edit } from "@mui/icons-material";
 
 interface Props {
   // championInfo: any;
   championId: string;
   versionNumber: string;
+  showSelectChampion: () => void;
 }
 
-const ChampionInfo: FC<Props> = ({ championId, versionNumber }) => {
+const ChampionInfo: FC<Props> = ({
+  championId,
+  versionNumber,
+  showSelectChampion,
+}) => {
   const [championInfo, setChampionInfo] = useState<IChampionDetails>();
   const { testMode, minimumView } = useOptionStore((state) => state.options);
   useEffect(() => {
@@ -45,6 +52,10 @@ const ChampionInfo: FC<Props> = ({ championId, versionNumber }) => {
     setChampionInfo(championDetail);
   };
 
+  const onClickEdit = (event: React.MouseEvent<HTMLButtonElement>) => {
+    event.stopPropagation();
+    showSelectChampion();
+  };
   if (!championInfo) {
     return null;
   }
@@ -86,6 +97,15 @@ const ChampionInfo: FC<Props> = ({ championId, versionNumber }) => {
             <span>{championId}</span>
             <span> / {championInfo.name}</span>
           </Typography>
+          <IconButton
+            aria-label="edit"
+            size="small"
+            onClick={onClickEdit}
+            // variant="outlined"
+            // style={{ maxWidth: "250px" }}
+            sx={{ ml: 1 }}>
+            <Edit />
+          </IconButton>
         </AccordionSummary>
         <AccordionDetails
           sx={{

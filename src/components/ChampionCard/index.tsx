@@ -12,6 +12,7 @@ import { TeamChampInfo } from "../../pages/Strategy";
 import ChampionInfo from "../ChampionInfo";
 import SelectChampion from "../SelectChampion";
 import { Edit } from "@mui/icons-material";
+import { useOptionStore } from "../../store/OptionStore";
 
 interface Props {
   onClose: () => void;
@@ -32,6 +33,7 @@ const ChampionCard: FC<Props> = ({
   teamChampInfo,
 }) => {
   const [showSelectChampion, setShowSelectChampion] = useState(false);
+  const { showPositions } = useOptionStore((state) => state.options);
 
   const handleSelectedChampion = useCallback(
     (team: string, champion: IChampion, position: string) => {
@@ -41,14 +43,20 @@ const ChampionCard: FC<Props> = ({
     [onClose, onSelectChampion],
   );
 
+  const onClickSelectChampion = useCallback(() => {
+    setShowSelectChampion(true);
+  }, [showSelectChampion]);
+
   return (
-    <Card sx={{ border: "none", boxShadow: "none" }}>
-      <CardContent>
+    <Card sx={{ border: "none", boxShadow: "none", py: 0 }}>
+      <CardContent sx={{ py: 0 }}>
         <Grid container alignItems="center">
-          <Grid item>
-            <Typography variant="h6">{teamChampInfo.position}</Typography>
-          </Grid>
-          {!!teamChampInfo.champion && (
+          {showPositions && (
+            <Grid item>
+              <Typography variant="h6">{teamChampInfo.position}</Typography>
+            </Grid>
+          )}
+          {/* {!!teamChampInfo.champion && (
             <Grid item>
               <IconButton
                 aria-label="edit"
@@ -60,10 +68,11 @@ const ChampionCard: FC<Props> = ({
                 <Edit />
               </IconButton>
             </Grid>
-          )}
+          )} */}
         </Grid>
         {!!teamChampInfo.champion ? (
           <ChampionInfo
+            showSelectChampion={onClickSelectChampion}
             championId={teamChampInfo.champion.id}
             versionNumber={teamChampInfo.champion.version}
           />

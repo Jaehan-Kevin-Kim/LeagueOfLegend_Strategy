@@ -54,7 +54,7 @@ const SkillDetails: FC<Props> = ({
           ? setSkillShortCut("E")
           : setSkillShortCut("R");
 
-        setSkillShortCut("E");
+        // setSkillShortCut("E");
         break;
       case 4:
         setSkillShortCut("R");

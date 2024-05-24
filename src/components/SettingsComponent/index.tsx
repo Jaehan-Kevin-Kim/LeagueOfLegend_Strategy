@@ -114,6 +114,18 @@ const SettingsComponent = () => {
             <FormControlLabel
               control={
                 <Switch
+                  name="showPositions"
+                  checked={options.showPositions}
+                  onChange={onChangeOptionSwitch}
+                />
+              }
+              // labelPlacement="end"
+              label="Show Positions"></FormControlLabel>
+          </MenuItem>
+          <MenuItem>
+            <FormControlLabel
+              control={
+                <Switch
                   name="testMode"
                   checked={options.testMode}
                   onChange={onChangeOptionSwitch}
