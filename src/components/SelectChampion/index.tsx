@@ -38,6 +38,8 @@ const SelectChampion: FC<Props> = ({
   const [filteredChampions, setFilteredChampions] = useState<IChampion[]>([]);
   const { data, loading, error } = useGetChampionInfo();
 
+  const { testMode } = useOptionStore((state) => state.options);
+
   // const executeGetChampionsWithVersion = useChampionStoreHook();
 
   // const [championName, setChampionName] = useState("");
@@ -90,12 +92,14 @@ const SelectChampion: FC<Props> = ({
           {filteredChampions.map((champion) => (
             <Grid item key={champion.id} xs={6} sm={4} md={3} lg={2}>
               <Card onClick={() => onClickChampion(champion)} sx={CardStyle}>
-                <CardMedia
-                  component="img"
-                  sx={CardMediaStyle}
-                  image={`https://ddragon.leagueoflegends.com/cdn/${champion.version}/img/champion/${champion.id}.png`}
-                  alt={champion.name}
-                />
+                {!testMode && (
+                  <CardMedia
+                    component="img"
+                    sx={CardMediaStyle}
+                    image={`https://ddragon.leagueoflegends.com/cdn/${champion.version}/img/champion/${champion.id}.png`}
+                    alt={champion.name}
+                  />
+                )}
                 <CardContent>
                   <Typography noWrap sx={TypographyStyle} variant="body2">
                     {champion.id}

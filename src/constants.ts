@@ -9,3 +9,8 @@ export const ALERT_TIMES_MESSAGES = [
     { seconds: 450, message: `7:30 <br />정글 위에 있을 확률 높음` },
     { seconds: 480, message: `8:00 <br />정글 6랩 타이밍` },
 ]
+
+
+export const BUILD_WEB_ADDRESS = 'https://www.deeplol.gg/champions'
+
+export const SKILL_WEB_ADDRESS = 'https://www.leagueoflegends.com/ko-kr/champions'

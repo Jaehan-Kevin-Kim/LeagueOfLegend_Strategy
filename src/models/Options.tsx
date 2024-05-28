@@ -6,5 +6,6 @@ export interface IOptions {
   showOpponent: boolean;
   showSpells: boolean;
   showPositions: boolean;
+  alarmSound: boolean;
   testMode: boolean;
 }

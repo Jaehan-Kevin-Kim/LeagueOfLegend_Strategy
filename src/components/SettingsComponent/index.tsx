@@ -126,6 +126,18 @@ const SettingsComponent = () => {
             <FormControlLabel
               control={
                 <Switch
+                  name="alarmSound"
+                  checked={options.alarmSound}
+                  onChange={onChangeOptionSwitch}
+                />
+              }
+              // labelPlacement="end"
+              label="Alarm Sound"></FormControlLabel>
+          </MenuItem>
+          <MenuItem>
+            <FormControlLabel
+              control={
+                <Switch
                   name="testMode"
                   checked={options.testMode}
                   onChange={onChangeOptionSwitch}

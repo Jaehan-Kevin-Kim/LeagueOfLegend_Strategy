@@ -1,3 +1,5 @@
+import AddIcon from "@mui/icons-material/Add";
+import RemoveIcon from "@mui/icons-material/Remove";
 import {
   Box,
   Button,
@@ -8,8 +10,6 @@ import {
 import { useCallback, useEffect, useState } from "react";
 import { ALERT_TIMES_MESSAGES } from "../../constants";
 import FlashingDialog from "../FlashingDialog";
-import AddIcon from "@mui/icons-material/Add";
-import RemoveIcon from "@mui/icons-material/Remove";
 
 const TimerComponent = () => {
   const [seconds, setSeconds] = useState(0);

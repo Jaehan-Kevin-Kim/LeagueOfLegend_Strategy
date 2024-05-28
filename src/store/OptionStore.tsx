@@ -17,6 +17,7 @@ const initialState: OptionState = {
     showOpponent: true,
     showSpells: false,
     showPositions: true,
+    alarmSound: true,
     testMode: false,
   },
 };

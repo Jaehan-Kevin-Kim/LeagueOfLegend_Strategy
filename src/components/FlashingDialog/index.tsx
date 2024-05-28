@@ -10,6 +10,7 @@ import {
 
 import DeleteIcon from "@mui/icons-material/Delete";
 import NotificationsOffIcon from "@mui/icons-material/NotificationsOff";
+import { useOptionStore } from "../../store/OptionStore";
 
 interface Props {
   message: string;
@@ -17,9 +18,11 @@ interface Props {
   alertCloseHandle: () => void;
 }
 const FlashingDialog: FC<Props> = ({ message, isActive, alertCloseHandle }) => {
+  const { alarmSound } = useOptionStore((state) => state.options);
+
   const [color, setColor] = useState("yellow");
   const [seconds, setSeconds] = useState(0);
-  const [audioVolume, setVolume] = useState(0.5);
+  const [audioVolume, setVolume] = useState(0.05);
   const audioRef = useRef(new Audio("/sounds/alarm-sound.mp3"));
 
   useEffect(() => {
@@ -30,10 +33,13 @@ const FlashingDialog: FC<Props> = ({ message, isActive, alertCloseHandle }) => {
       setColor((prevColor) => (prevColor === "yellow" ? "red" : "yellow"));
       setSeconds((prevSeconds) => prevSeconds + 0.5);
     }, 500);
-    audioRef.current.play();
-    audioRef.current.volume = audioVolume;
 
-    if (seconds >= 7) {
+    if (alarmSound) {
+      audioRef.current.play();
+      audioRef.current.volume = audioVolume;
+    }
+
+    if (seconds >= 6 && alarmSound) {
       audioRef.current.pause();
       audioRef.current.currentTime = 0;
     }
