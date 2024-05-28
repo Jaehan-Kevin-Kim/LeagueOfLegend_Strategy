@@ -113,21 +113,22 @@ const ChampionInfo: FC<Props> = ({
       }
 
       if (pageType === "skill-page") {
-        let attemptCount = 0;
+        // let attemptCount = 0;
 
+        // let url = `/ko-kr/champions/${engChampionInfo?.name
         let url = `${SKILL_WEB_ADDRESS}/${engChampionInfo?.name
           .replace(".", "")
           .replace(" ", "-")
           .toLowerCase()}`;
-        let response = await checkIfPageIsLoading(url);
-        if (response === 404) {
-          url = `${SKILL_WEB_ADDRESS}/${championId.toLowerCase()}`;
-          response = await checkIfPageIsLoading(url);
-        }
+        // let response = await checkIfPageIsLoading(url);
+        // if (response === 404) {
+        //   url = `${SKILL_WEB_ADDRESS}/${championId.toLowerCase()}`;
+        //   response = await checkIfPageIsLoading(url);
+        // }
 
-        if (response === 404) {
-          url = `${SKILL_WEB_ADDRESS}`;
-        }
+        // if (response === 404) {
+        //   url = `${SKILL_WEB_ADDRESS}`;
+        // }
 
         window.open(url, "_blank");
       }
@@ -138,6 +139,7 @@ const ChampionInfo: FC<Props> = ({
     [engChampionInfo, championId],
   );
 
+  /*
   const checkIfPageIsLoading = useCallback(
     async (url: string) => {
       try {
@@ -160,7 +162,7 @@ const ChampionInfo: FC<Props> = ({
     },
     [engChampionInfo],
   );
-
+*/
   const onClickEdit = (event: React.MouseEvent<HTMLButtonElement>) => {
     event.stopPropagation();
     showSelectChampion();
