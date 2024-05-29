@@ -1,16 +1,13 @@
 import { useCallback, useEffect, useState } from "react";
 
 import ChampionCard from "../../components/ChampionCard";
-import { Button, Grid } from "@mui/material";
+import { Box, Button, Grid, Slider, Typography } from "@mui/material";
 import useChampionStoreHook from "../../hooks/useChampionStoreHook";
 import { IChampion, ITeamChampInfo } from "../../models/Champion";
-// import { Button } from "@headlessui/react";
 import useSummonerSpellStoreHook from "../../hooks/useSummonerSpellStoreHook";
 import { useOptionStore } from "../../store/OptionStore";
 import { useGetChampionInfo } from "../../store/ChampionStore";
 import SummonerSpells from "../../components/SummonerSpells";
-
-const positions = ["TOP", "JG", "MID", "ADC", "SUPP"];
 
 export interface TeamChampInfo {
   team: string;
@@ -18,51 +15,54 @@ export interface TeamChampInfo {
   position: string;
 }
 
+const minimapAlertRepeatTimeMarks = [
+  {
+    value: 3,
+    label: "3",
+  },
+  {
+    value: 5,
+    label: "5",
+  },
+  {
+    value: 8,
+    label: "8",
+  },
+  {
+    value: 10,
+    label: "10",
+  },
+  {
+    value: 15,
+    label: "15",
+  },
+];
+
 const Strategy = () => {
-  //   const { data, loading, error } = useGetChampionInfo();
-  // const { showSkillDetails, changeShowSkillDetails } = useGetChampionInfo();
   const executeGetChampionsWithVersion = useChampionStoreHook();
-  //   const [myTeamChampsInfo, setMyTeamChampsInfo] = useState<TeamChampInfo[]>([]);
-  //   const [opponentTeamChampsInfo, setOpponentTeamChampsInfo] = useState<
-  //     TeamChampInfo[]
-  //   >([]);
   const getSummonerSpellsWithVersion = useSummonerSpellStoreHook();
   const { updateTeamChampsInfo, resetSpecificTeamChampsInfo, teamChampsInfo } =
     useGetChampionInfo();
-  const { options } = useOptionStore();
+  const { options, minimapAlertRepeatPeriod, updateMinimapAlertRepeatPeriod } =
+    useOptionStore();
   // const [teamChampsInfo, setTeamChampsInfo] = useState<TeamChampInfo[]>([]);
   const [myTeamChampsInfo, setMyTeamChampsInfo] = useState<TeamChampInfo[]>([]);
   const [opponentTeamChampsInfo, setOpponentTeamChampsInfo] = useState<
     TeamChampInfo[]
   >([]);
+  // const [repeatMinimapAlertTime, setRepeatMinimapAlertTime] = useState(
+  //   minimapAlertRepeatPeriod,
+  // );
 
   const [showSelectChampion, setShowSelectChampion] = useState(false);
 
-  //   const getChampionInfo = useGetChampionInfo();
+  // useEffect(() => {
+  //   setRepeatMinimapAlertTime(minimapAlertRepeatPeriod);
+  // }, [minimapAlertRepeatPeriod]);
 
   useEffect(() => {
     executeGetChampionsWithVersion();
     getSummonerSpellsWithVersion();
-    /*
-    const initialChampsInfo = positions.flatMap((position) => [
-      { team: "MyTeam", champion: null, position },
-      { team: "Opponent", champion: null, position },
-    ]);
-    setTeamChampsInfo(initialChampsInfo);
-    */
-    // const myTeamChampsInfo = positions.map((position) => ({
-    //   team: "MyTeam",
-    //   champion: null,
-    //   position,
-    // }));
-    // const opponentTeamChampsInfo = positions.map((position) => ({
-    //   team: "Opponent",
-    //   champion: null,
-    //   position,
-    // }));
-
-    // setMyTeamChampsInfo(myTeamChampsInfo);
-    // setOpponentTeamChampsInfo(opponentTeamChampsInfo);
   }, [
     executeGetChampionsWithVersion,
     getSummonerSpellsWithVersion,
@@ -76,76 +76,13 @@ const Strategy = () => {
     occupyTeamChampsInfo(teamChampsInfo);
   }, [teamChampsInfo]);
 
-  // const updateTeamChampInfo = (
-  //   teamChampsInfo: TeamChampInfo[],
-  //   champion: IChampion,
-  //   position: string,
-  // ): TeamChampInfo[] => {
-  //   const updatedTeamChampInfo = teamChampsInfo.map((info) =>
-  //     info.position === position ? { ...info, champion } : info,
-  //   );
-
-  //   return updatedTeamChampInfo;
-  // };
-
   const handleSelectedChampion = useCallback(
     (team: string, champion: IChampion, position: string) => {
-      // 이거는 store에서 champ information 관리하는 코드임. 화욜에 와서 아래 code comment 풀기
-      // updateTeamChampsInfo({ team, champion, position });
-      // callUpdateChampsInfo(team, champion, position);
-
       updateTeamChampsInfo({ team, champion, position });
-
-      // if (team === "MyTeam") {
-      //   const myTeamChampList = teamChampsInfo.filter(
-      //     (info) => info.team === team,
-      //   );
-      //   setMyTeamChampsInfo(myTeamChampList);
-      // }
-
-      // if (team === "Opponent") {
-      //   const opponentTeamChampList = teamChampsInfo.filter(
-      //     (info) => info.team === team,
-      //   );
-      //   setOpponentTeamChampsInfo(opponentTeamChampList);
-      // }
-
-      //
-
-      /*
-
-      
-      if (team === "MyTeam") {
-        const updatedTeamChampInfo = updateTeamChampInfo(
-          myTeamChampsInfo,
-          champion,
-          position,
-        );
-        setMyTeamChampsInfo(updatedTeamChampInfo);
-      }
-      
-      if (team === "Opponent") {
-        const updatedTeamChampInfo = updateTeamChampInfo(
-          opponentTeamChampsInfo,
-          champion,
-          position,
-        );
-        setOpponentTeamChampsInfo(updatedTeamChampInfo);
-      }
-      */
     },
     [],
   );
 
-  // const callUpdateChampsInfo = useCallback(
-  //   (team: string, champion: IChampion, position: string) => {
-  //     updateTeamChampsInfo({ team, champion, position });
-  //   },
-  //   [teamChampsInfo, updateTeamChampsInfo],
-  // );
-
-  // setMyTeamChampsInfo(myTeamChampsInfo);
-  // setOpponentTeamChampsInfo(opponentTeamChampsInfo);
   const occupyTeamChampsInfo = useCallback(
     (teamChampsInfo: ITeamChampInfo[]) => {
       // if (team === "MyTeam") {
@@ -160,9 +97,6 @@ const Strategy = () => {
         (info) => info.team === "Opponent",
       );
       setOpponentTeamChampsInfo(opponentTeamChampList);
-      // }
-      // setMyTeamChampsInfo(myTeamChampsInfo);
-      // setOpponentTeamChampsInfo(opponentTeamChampsInfo);
     },
     [],
   );
@@ -175,10 +109,17 @@ const Strategy = () => {
     [],
   );
 
+  const onChangeMinimapAlertRepeatPeriodSlider = useCallback(
+    (event: Event, newValue: number | number[]) => {
+      // setRepeatMinimapAlertTime(newValue as number);
+      updateMinimapAlertRepeatPeriod(newValue as number);
+    },
+    [updateMinimapAlertRepeatPeriod],
+  );
+
   return (
     <>
       <Grid container spacing={1} sx={{ p: 1 }}>
-        {/* temporarily comment out below spell information */}
         {options.showSpells && <SummonerSpells></SummonerSpells>}
 
         {options.showMyTeam && (
@@ -251,6 +192,23 @@ const Strategy = () => {
           </Grid>
         )}
       </Grid>
+      <Box sx={{ width: "100%", display: "flex", justifyContent: "center" }}>
+        <Box sx={{ width: 250 }}>
+          <Typography sx={{ textAlign: "center" }}>
+            Minimap Alert Repeat Time (Sec)
+          </Typography>
+          <Slider
+            aria-label="Always visible"
+            // value={repeatMinimapAlertTime}
+            value={minimapAlertRepeatPeriod}
+            step={null}
+            min={3}
+            max={15}
+            onChange={onChangeMinimapAlertRepeatPeriodSlider}
+            marks={minimapAlertRepeatTimeMarks}
+            valueLabelDisplay="auto"></Slider>
+        </Box>
+      </Box>
     </>
   );
 };

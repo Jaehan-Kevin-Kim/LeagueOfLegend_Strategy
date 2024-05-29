@@ -3,10 +3,12 @@ import { IOptions } from "../models/Options";
 
 interface OptionStore extends OptionState {
   updateOption: (options: IOptions) => void;
+  updateMinimapAlertRepeatPeriod: (time: number) => void;
 }
 
 interface OptionState {
   options: IOptions;
+  minimapAlertRepeatPeriod: number;
 }
 
 const initialState: OptionState = {
@@ -19,7 +21,9 @@ const initialState: OptionState = {
     showPositions: true,
     alarmSound: true,
     testMode: false,
+    minimapAlertSound: true,
   },
+  minimapAlertRepeatPeriod: 8,
 };
 
 export const useOptionStore = create<OptionStore>((set, get) => ({
@@ -30,5 +34,10 @@ export const useOptionStore = create<OptionStore>((set, get) => ({
     console.log("updatedOptions: ", updatedOptions.options);
 
     set({ ...initialState, options });
+  },
+
+  updateMinimapAlertRepeatPeriod: (time: number) => {
+    const currentOptions = get().options;
+    set({ ...currentOptions, minimapAlertRepeatPeriod: time });
   },
 }));

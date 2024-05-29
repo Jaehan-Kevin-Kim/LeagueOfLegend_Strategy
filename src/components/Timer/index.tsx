@@ -7,16 +7,21 @@ import {
   IconButton,
   Typography,
 } from "@mui/material";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { ALERT_TIMES_MESSAGES } from "../../constants";
 import FlashingDialog from "../FlashingDialog";
+import { useOptionStore } from "../../store/OptionStore";
 
 const TimerComponent = () => {
+  const optionState = useOptionStore((state) => state);
+
   const [seconds, setSeconds] = useState(0);
   const [isActive, setIsActive] = useState(false);
   const [isStarted, setIsStarted] = useState(false);
   const [showAlert, setShowAlert] = useState(false);
   const [alertMessage, setAlertMessage] = useState("");
+  const beepAudioRef = useRef(new Audio("/sounds/beep-sound.wav"));
+  const minimapCheckAudioRef = useRef(new Audio("/sounds/minimap.mp3"));
 
   useEffect(() => {
     let interval: NodeJS.Timeout | null = null;
@@ -35,22 +40,26 @@ const TimerComponent = () => {
         setAlertMessage(timeAndMessage.message);
       }
     });
-    // if (seconds === 1 || seconds === 150) {
-    // }
 
-    // if (seconds === 15 || seconds === 160) {
-    //   setShowAlert(false);
-    // }
-    // if (seconds === 150) {
-    //   displayAlert();
-    // }
+    if (
+      seconds >= 120 &&
+      optionState.options.minimapAlertSound &&
+      seconds % optionState.minimapAlertRepeatPeriod === 0
+    ) {
+      beepAudioRef.current.play();
+      beepAudioRef.current.volume = 0.07;
+      beepAudioRef.current.currentTime = 0;
+      minimapCheckAudioRef.current.play();
+      minimapCheckAudioRef.current.volume = 1;
+      minimapCheckAudioRef.current.currentTime = 0;
+    }
 
     return () => {
       if (interval) {
         clearInterval(interval);
       }
     };
-  }, [isActive, seconds]);
+  }, [isActive, seconds, optionState.minimapAlertRepeatPeriod]);
 
   const onClickTimerButton = useCallback(() => {
     setIsActive(!isActive);

@@ -138,6 +138,18 @@ const SettingsComponent = () => {
             <FormControlLabel
               control={
                 <Switch
+                  name="minimapAlertSound"
+                  checked={options.minimapAlertSound}
+                  onChange={onChangeOptionSwitch}
+                />
+              }
+              // labelPlacement="end"
+              label="Minimap Check Sound"></FormControlLabel>
+          </MenuItem>
+          <MenuItem>
+            <FormControlLabel
+              control={
+                <Switch
                   name="testMode"
                   checked={options.testMode}
                   onChange={onChangeOptionSwitch}

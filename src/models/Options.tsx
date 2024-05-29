@@ -8,4 +8,5 @@ export interface IOptions {
   showPositions: boolean;
   alarmSound: boolean;
   testMode: boolean;
+  minimapAlertSound: boolean;
 }
