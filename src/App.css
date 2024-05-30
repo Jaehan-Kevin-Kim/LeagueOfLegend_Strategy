@@ -36,3 +36,14 @@
     transform: rotate(360deg);
   }
 }
+
+.MuiAccordionSummary-root {
+  /* 최소 높이 제거 */
+  min-height: 0 !important;
+  /* display: flex; */
+}
+
+.MuiAccordionSummary-root.Mui-expanded {
+  /* 확장 상태에서의 최소 높이도 제거 */
+  min-height: 0 !important;
+}

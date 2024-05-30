@@ -1,9 +1,10 @@
 import axios from "axios";
 import { create } from "zustand";
 import { ISummonerSpell } from "../models/SummonerSpells";
+import { Languages } from "../models/Options";
 
 interface SummonerSpellStore extends SummonerSpellState {
-  getSummonerSpell: (version: string) => Promise<void>;
+  getSummonerSpell: (version: string, language: Languages) => Promise<void>;
 }
 
 interface SummonerSpellState {
@@ -23,13 +24,13 @@ const initialState: SummonerSpellState = {
 export const useSummonerSpellStore = create<SummonerSpellStore>((set, get) => ({
   ...initialState,
 
-  getSummonerSpell: async (version: string) => {
+  getSummonerSpell: async (version: string, language: Languages) => {
     set({ ...initialState, loading: true });
     try {
       const {
         data: { data },
       } = await axios.get(
-        `https://ddragon.leagueoflegends.com/cdn/${version}/data/en_US/summoner.json`,
+        `https://ddragon.leagueoflegends.com/cdn/${version}/data/${language}/summoner.json`,
       );
 
       // console.log("data for summoner spell: ", data);

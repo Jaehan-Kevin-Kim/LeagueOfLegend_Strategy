@@ -48,7 +48,21 @@ const ChampionCard: FC<Props> = ({
   }, [showSelectChampion]);
 
   return (
-    <Card sx={{ border: "none", boxShadow: "none", py: 0 }}>
+    <Card
+      sx={{
+        border: "none",
+        boxShadow: "none",
+        py: 0,
+        "& .MuiCardContent-root": {
+          paddingBottom: 0,
+        },
+        "& .MuiCardContent-root:last-child": {
+          paddingBottom: "2px",
+        },
+        "& .MuiPaper-root": {
+          marginTop: "1px",
+        },
+      }}>
       <CardContent sx={{ py: 0 }}>
         <Grid container alignItems="center">
           {showPositions && (

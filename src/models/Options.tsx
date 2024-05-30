@@ -9,4 +9,11 @@ export interface IOptions {
   alarmSound: boolean;
   testMode: boolean;
   minimapAlertSound: boolean;
+  language: Languages;
+}
+
+type languages = "KO" | "EN";
+export enum Languages {
+  KR = "ko_KR",
+  EN = "en_US",
 }

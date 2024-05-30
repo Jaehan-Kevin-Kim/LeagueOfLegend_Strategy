@@ -1,5 +1,5 @@
 import { create } from "zustand";
-import { IOptions } from "../models/Options";
+import { IOptions, Languages } from "../models/Options";
 
 interface OptionStore extends OptionState {
   updateOption: (options: IOptions) => void;
@@ -22,6 +22,7 @@ const initialState: OptionState = {
     alarmSound: true,
     testMode: false,
     minimapAlertSound: true,
+    language: Languages.KR,
   },
   minimapAlertRepeatPeriod: 8,
 };

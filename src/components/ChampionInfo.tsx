@@ -3,6 +3,7 @@ import {
   Accordion,
   AccordionDetails,
   AccordionSummary,
+  Box,
   Button,
   CardMedia,
   IconButton,
@@ -17,6 +18,7 @@ import SkillDetails from "./SkillDetails";
 import { useOptionStore } from "../store/OptionStore";
 import { Edit } from "@mui/icons-material";
 import { BUILD_WEB_ADDRESS, SKILL_WEB_ADDRESS } from "../constants";
+import { Languages } from "../models/Options";
 
 interface Props {
   // championInfo: any;
@@ -34,7 +36,9 @@ const ChampionInfo: FC<Props> = ({
   const [championInfo, setChampionInfo] = useState<IChampionDetails>();
   const [engChampionInfo, setEngChampionInfo] = useState<IChampionDetails>();
   // const [openChampionClickMenu, setOpenChampionClickMenu] = useState(false);
-  const { testMode, minimumView } = useOptionStore((state) => state.options);
+  const { testMode, minimumView, language } = useOptionStore(
+    (state) => state.options,
+  );
 
   const openChampionClickMenu = Boolean(anchorEl);
 
@@ -52,7 +56,7 @@ const ChampionInfo: FC<Props> = ({
     const {
       data: { data },
     } = await axios.get(
-      `https://ddragon.leagueoflegends.com/cdn/${versionNumber}/data/ko_KR/champion/${championId}.json`,
+      `https://ddragon.leagueoflegends.com/cdn/${versionNumber}/data/${language}/champion/${championId}.json`,
     );
 
     console.log("data in callGetChampionInfoAPI", data);
@@ -68,7 +72,7 @@ const ChampionInfo: FC<Props> = ({
       const {
         data: { data },
       } = await axios.get(
-        `https://ddragon.leagueoflegends.com/cdn/${versionNumber}/data/en_US/champion/${championId}.json`,
+        `https://ddragon.leagueoflegends.com/cdn/${versionNumber}/data/${Languages.EN}/champion/${championId}.json`,
       );
 
       console.log("data in callGetChampionInfoAPI", data);
@@ -186,16 +190,28 @@ const ChampionInfo: FC<Props> = ({
               // 내부 컨텐츠의 마진 조절
               margin: 0,
               alignItems: "center",
+              "&.Mui-expanded": {
+                margin: 0, // 확장된 상태에서의 마진을 0으로 설정
+                minHeight: 0, // 최소 높이 제거
+              },
             },
             "& .MuiAccordionSummary-expandIconWrapper": {
               // 확장 아이콘의 패딩 조절
               marginRight: 1,
             },
+            "& .MuiAccordionSummary-root": {
+              minHeight: 0, // 최소 높이 제거
+              "&.Mui-expanded": {
+                minHeight: 0,
+                margin: 0, // 확장됐을 때 마진 제거
+              },
+            },
+            // maxHeight: "50px",
           }}>
           {!minimumView && (
             <CardMedia
               component="img"
-              sx={{ width: 48, height: 48, marginRight: 2 }} // Adjust sizing and margin as needed
+              sx={{ width: 40, height: 40, marginRight: 2 }} // Adjust sizing and margin as needed
               image={
                 testMode
                   ? ""

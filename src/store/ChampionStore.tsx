@@ -2,6 +2,7 @@ import axios from "axios";
 import { create } from "zustand";
 import { IChampion, ITeamChampInfo } from "../models/Champion";
 import { POSITIONS } from "../constants";
+import { Languages } from "../models/Options";
 
 // const initialState = {
 //   // champion: any;
@@ -25,7 +26,7 @@ interface ChampionState {
 
 // 스토어의 메서드 및 상태를 포함하는 인터페이스 정의
 interface ChampionStore extends ChampionState {
-  execute: (version: string) => Promise<void>;
+  execute: (version: string, language: Languages) => Promise<void>;
   updateTeamChampsInfo: (teamChampInfo: ITeamChampInfo) => void;
   resetSpecificTeamChampsInfo: (team: string) => void;
   resetAllTeamsChampsInfo: () => void;
@@ -53,13 +54,13 @@ const initialState: ChampionState = {
 export const useGetChampionInfo = create<ChampionStore>((set, get) => ({
   ...initialState,
 
-  execute: async (version: string) => {
+  execute: async (version: string, language: Languages) => {
     set({ ...initialState, loading: true });
     try {
       const {
         data: { data },
       } = await axios.get(
-        `https://ddragon.leagueoflegends.com/cdn/${version}/data/ko_KR/champion.json`,
+        `https://ddragon.leagueoflegends.com/cdn/${version}/data/${language}/champion.json`,
       );
       const championArray: IChampion[] = Object.values(data);
 
