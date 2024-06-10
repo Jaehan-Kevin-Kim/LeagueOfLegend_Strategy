@@ -22,6 +22,10 @@ const TimerComponent = () => {
   const [alertMessage, setAlertMessage] = useState("");
   const beepAudioRef = useRef(new Audio("/sounds/beep-sound.wav"));
   const minimapCheckAudioRef = useRef(new Audio("/sounds/minimap.mp3"));
+  const newWaveCreationAudioRef = useRef(new Audio("/sounds/new_wave.mp3"));
+  const gameReminderAlertAudioRef = useRef(
+    new Audio("/sounds/skill_spell_check.mp3"),
+  );
 
   useEffect(() => {
     let interval: NodeJS.Timeout | null = null;
@@ -41,6 +45,10 @@ const TimerComponent = () => {
       }
     });
 
+    if (optionState.options.muteAll) {
+      return;
+    }
+
     if (
       seconds >= 120 &&
       optionState.options.minimapAlertSound &&
@@ -53,6 +61,27 @@ const TimerComponent = () => {
       minimapCheckAudioRef.current.volume = 1;
       minimapCheckAudioRef.current.currentTime = 0;
     }
+
+    // If newWaveCreationSound is on -> Start from 1:30, every 30 seconds alarm.
+    if (seconds >= 90) {
+      if (optionState.options.newWaveCreationSound && seconds % 30 === 0) {
+        newWaveCreationAudioRef.current.play();
+        newWaveCreationAudioRef.current.volume = 1;
+        newWaveCreationAudioRef.current.currentTime = 0;
+      }
+      if (
+        optionState.options.gameReminderAlertSound &&
+        seconds % optionState.gameReminderAlertPeriod === 0
+      ) {
+        gameReminderAlertAudioRef.current.play();
+        gameReminderAlertAudioRef.current.volume = 1;
+        gameReminderAlertAudioRef.current.currentTime = 0;
+      }
+    }
+
+    // If gameReminderAlertSound : Start from 1:40, every 20 secods alert sound
+
+    //
 
     return () => {
       if (interval) {

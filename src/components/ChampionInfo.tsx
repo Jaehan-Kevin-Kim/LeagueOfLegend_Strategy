@@ -211,7 +211,7 @@ const ChampionInfo: FC<Props> = ({
           {!minimumView && (
             <CardMedia
               component="img"
-              sx={{ width: 40, height: 40, marginRight: 2 }} // Adjust sizing and margin as needed
+              sx={{ width: 40, height: 40, marginRight: 2, paddingTop: 1 }} // Adjust sizing and margin as needed
               image={
                 testMode
                   ? ""

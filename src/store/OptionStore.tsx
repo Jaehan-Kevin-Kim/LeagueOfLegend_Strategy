@@ -9,6 +9,7 @@ interface OptionStore extends OptionState {
 interface OptionState {
   options: IOptions;
   minimapAlertRepeatPeriod: number;
+  gameReminderAlertPeriod: number;
 }
 
 const initialState: OptionState = {
@@ -23,8 +24,13 @@ const initialState: OptionState = {
     testMode: false,
     minimapAlertSound: true,
     language: Languages.KR,
+    darkMode: false,
+    newWaveCreationSound: true,
+    gameReminderAlertSound: true,
+    muteAll: false,
   },
   minimapAlertRepeatPeriod: 8,
+  gameReminderAlertPeriod: 20,
 };
 
 export const useOptionStore = create<OptionStore>((set, get) => ({
@@ -41,4 +47,13 @@ export const useOptionStore = create<OptionStore>((set, get) => ({
     const currentOptions = get().options;
     set({ ...currentOptions, minimapAlertRepeatPeriod: time });
   },
+
+  updateGameReminderAlertPeriod: (time: number) => {
+    const currentOptions = get().options;
+    set({ ...currentOptions, gameReminderAlertPeriod: time });
+  },
 }));
+
+// wave;
+// spell;
+// skill;

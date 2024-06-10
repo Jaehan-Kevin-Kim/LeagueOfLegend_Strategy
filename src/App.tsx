@@ -15,51 +15,63 @@ import Strategy from "./pages/Strategy/index";
 import TimerComponent from "./components/Timer";
 
 import { useVersionStore } from "./store/VersionStore";
+import { createTheme, CssBaseline, ThemeProvider } from "@mui/material";
+import { useOptionStore } from "./store/OptionStore";
 
 const App = () => {
   // const { latestVersion, getLatestVersion } = useVersionStore();
 
   const getLatestVersion = useVersionStore((state) => state.getLatestVersion);
+  const { darkMode } = useOptionStore((state) => state.options);
+
+  const theme = createTheme({
+    palette: {
+      mode: darkMode ? "dark" : "light",
+    },
+  });
 
   useEffect(() => {
     getLatestVersion();
   }, [getLatestVersion]);
 
   return (
-    <Router>
-      {/* <Container maxWidth="xl"> */}
-      {/* <> */}
-      <Box
-        sx={{
-          display: "flex",
-          justifyContent: "space-between",
-          // justifyContent: "center",
-          alignItems: "center",
-          width: "100%",
-        }}>
-        <Box sx={{ flex: 1 }}>
-          <NavigationTabs />
+    <ThemeProvider theme={theme}>
+      <CssBaseline />
+      <Router>
+        {/* <Container maxWidth="xl"> */}
+        {/* <> */}
+        <Box
+          sx={{
+            display: "flex",
+            justifyContent: "space-between",
+            // justifyContent: "center",
+            alignItems: "center",
+            width: "100%",
+          }}>
+          <Box sx={{ flex: 1 }}>
+            <NavigationTabs />
+          </Box>
+          <Box sx={{ flex: 0 }}>
+            <TimerComponent />
+          </Box>
+          <Box sx={{ flex: 1, display: "flex", justifyContent: "flex-end" }}>
+            <SettingsComponent />
+          </Box>
+          {/* </Box> */}
         </Box>
-        <Box sx={{ flex: 0 }}>
-          <TimerComponent />
-        </Box>
-        <Box sx={{ flex: 1, display: "flex", justifyContent: "flex-end" }}>
-          <SettingsComponent />
-        </Box>
-        {/* </Box> */}
-      </Box>
-      <Routes>
-        <Route path="/" element={<Navigate to="/strategy" />}></Route>
-        <Route path="/strategy" element={<Strategy />} />
-        <Route path="/home" element={<Home />} />
-        {/* <div className="App dark:bg-slate-800">
+        <Routes>
+          <Route path="/" element={<Navigate to="/strategy" />}></Route>
+          <Route path="/strategy" element={<Strategy />} />
+          <Route path="/home" element={<Home />} />
+          {/* <div className="App dark:bg-slate-800">
         <h1 className="text-3xl font-bold underline">Hello world!</h1>
         <h1>Hello World</h1>
       </div> */}
-      </Routes>
-      {/* </Container> */}
-      {/* </> */}
-    </Router>
+        </Routes>
+        {/* </Container> */}
+        {/* </> */}
+      </Router>
+    </ThemeProvider>
   );
 };
 

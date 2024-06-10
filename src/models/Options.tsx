@@ -9,7 +9,11 @@ export interface IOptions {
   alarmSound: boolean;
   testMode: boolean;
   minimapAlertSound: boolean;
+  newWaveCreationSound: boolean;
+  gameReminderAlertSound: boolean;
   language: Languages;
+  darkMode: boolean;
+  muteAll: boolean;
 }
 
 type languages = "KO" | "EN";

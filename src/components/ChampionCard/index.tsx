@@ -52,6 +52,7 @@ const ChampionCard: FC<Props> = ({
       sx={{
         border: "none",
         boxShadow: "none",
+        background: "transparent",
         py: 0,
         "& .MuiCardContent-root": {
           paddingBottom: 0,

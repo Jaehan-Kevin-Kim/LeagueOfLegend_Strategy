@@ -1,20 +1,29 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, { MouseEvent, useCallback, useEffect, useState } from "react";
 // import './pages/strategy'
 import { Settings } from "@mui/icons-material";
 import {
+  Box,
+  Divider,
   FormControlLabel,
   FormGroup,
   IconButton,
   Menu,
   MenuItem,
   Switch,
+  ToggleButton,
+  ToggleButtonGroup,
 } from "@mui/material";
 import { useOptionStore } from "../../store/OptionStore";
+import { Languages } from "../../models/Options";
 
 const SettingsComponent = () => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
   const { options, updateOption } = useOptionStore();
+
+  const [selectedLanguage, setSelectedLanguage] = useState<Languages>(
+    Languages.KR,
+  );
 
   const handleClickMenu = (event: React.MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget);
@@ -30,6 +39,18 @@ const SettingsComponent = () => {
     },
     [updateOption, options],
   );
+
+  const onClickChangeLanguageToggle = useCallback(
+    (event: MouseEvent<HTMLElement>, newLanguage: Languages) => {
+      setSelectedLanguage(newLanguage);
+      updateOption({ ...options, language: newLanguage });
+    },
+    [selectedLanguage, updateOption, options],
+  );
+
+  const onClickMuteAllToggle = useCallback(() => {
+    updateOption({ ...options, muteAll: !options.muteAll });
+  }, [options, updateOption]);
 
   return (
     <>
@@ -150,6 +171,30 @@ const SettingsComponent = () => {
             <FormControlLabel
               control={
                 <Switch
+                  name="newWaveCreationSound"
+                  checked={options.newWaveCreationSound}
+                  onChange={onChangeOptionSwitch}
+                />
+              }
+              // labelPlacement="end"
+              label="New Wave Creation Alert Sound"></FormControlLabel>
+          </MenuItem>
+          <MenuItem>
+            <FormControlLabel
+              control={
+                <Switch
+                  name="gameReminderAlertSound"
+                  checked={options.gameReminderAlertSound}
+                  onChange={onChangeOptionSwitch}
+                />
+              }
+              // labelPlacement="end"
+              label="Game Reminder Alert Sound"></FormControlLabel>
+          </MenuItem>
+          <MenuItem>
+            <FormControlLabel
+              control={
+                <Switch
                   name="testMode"
                   checked={options.testMode}
                   onChange={onChangeOptionSwitch}
@@ -158,7 +203,62 @@ const SettingsComponent = () => {
               // labelPlacement="end"
               label="Test mode"></FormControlLabel>
           </MenuItem>
+          <MenuItem>
+            <FormControlLabel
+              control={
+                <Switch
+                  name="darkMode"
+                  checked={options.darkMode}
+                  onChange={onChangeOptionSwitch}
+                />
+              }
+              // labelPlacement="end"
+              label="Dark mode"></FormControlLabel>
+          </MenuItem>
         </FormGroup>
+        <Divider variant="middle" />
+        <Box sx={{ my: 1, display: "flex", justifyContent: "center" }}>
+          <ToggleButtonGroup
+            value={selectedLanguage}
+            exclusive
+            onChange={onClickChangeLanguageToggle}
+            aria-label="change language">
+            <ToggleButton
+              color="primary"
+              value={Languages.KR}
+              aria-label="korean">
+              KOREAN
+            </ToggleButton>
+            <ToggleButton
+              color="primary"
+              value={Languages.EN}
+              aria-label="english">
+              ENGLISH
+            </ToggleButton>
+          </ToggleButtonGroup>
+        </Box>
+        <Divider variant="middle" />
+        <Box sx={{ my: 1, display: "flex", justifyContent: "center" }}>
+          {/* <ToggleButtonGroup
+            value={options.muteAll}
+            // selected={options.muteAll}
+            exclusive
+            onChange={onClickMuteAllToggle}
+            aria-label="mute-all"> */}
+          <ToggleButton
+            color="primary"
+            sx={{ width: "80%" }}
+            value={options.muteAll}
+            selected={options.muteAll}
+            //  exclusive
+            onChange={onClickMuteAllToggle}
+            // value={options.muteAll}
+            aria-label="mute-all">
+            MUTE ALL
+          </ToggleButton>
+
+          {/* </ToggleButtonGroup> */}
+        </Box>
       </Menu>
     </>
   );
