@@ -3,6 +3,7 @@ import useSummonerSpellStoreHook from "../../hooks/useSummonerSpellStoreHook";
 import { useSummonerSpellStore } from "../../store/SummonerSpellStore";
 import { Grid, Typography } from "@mui/material";
 import SummonerSpellItem from "../SummonerSpellItem";
+import { useOptionStore } from "../../store/OptionStore";
 
 const SummonerSpells = () => {
   const getSummonerSpellsWithVersion = useSummonerSpellStoreHook();

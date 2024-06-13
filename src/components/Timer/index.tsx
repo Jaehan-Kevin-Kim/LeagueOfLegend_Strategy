@@ -11,6 +11,7 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { ALERT_TIMES_MESSAGES } from "../../constants";
 import FlashingDialog from "../FlashingDialog";
 import { useOptionStore } from "../../store/OptionStore";
+import { Languages } from "../../models/Options";
 
 const TimerComponent = () => {
   const optionState = useOptionStore((state) => state);
@@ -20,11 +21,18 @@ const TimerComponent = () => {
   const [isStarted, setIsStarted] = useState(false);
   const [showAlert, setShowAlert] = useState(false);
   const [alertMessage, setAlertMessage] = useState("");
+
   const beepAudioRef = useRef(new Audio("/sounds/beep-sound.wav"));
-  const minimapCheckAudioRef = useRef(new Audio("/sounds/minimap.mp3"));
+  const minimapCheckAudioRef = useRef(
+    optionState.options.language === Languages.EN
+      ? new Audio("/sounds/minimap.mp3")
+      : new Audio("/sounds/minimap_kr.mp3"),
+  );
   const newWaveCreationAudioRef = useRef(new Audio("/sounds/new_wave.mp3"));
   const gameReminderAlertAudioRef = useRef(
-    new Audio("/sounds/skill_spell_check.mp3"),
+    optionState.options.language === Languages.EN
+      ? new Audio("/sounds/skill_spell_check.mp3")
+      : new Audio("/sounds/skill_spell_check_kr.mp3"),
   );
 
   useEffect(() => {
@@ -41,7 +49,7 @@ const TimerComponent = () => {
       if (timeAndMessage.seconds === seconds) {
         console.log("call display");
         setShowAlert(true);
-        setAlertMessage(timeAndMessage.message);
+        setAlertMessage(timeAndMessage.message_kr);
       }
     });
 
@@ -54,9 +62,9 @@ const TimerComponent = () => {
       optionState.options.minimapAlertSound &&
       seconds % optionState.minimapAlertRepeatPeriod === 0
     ) {
-      beepAudioRef.current.play();
-      beepAudioRef.current.volume = 0.07;
-      beepAudioRef.current.currentTime = 0;
+      // beepAudioRef.current.play();
+      // beepAudioRef.current.volume = 0.07;
+      // beepAudioRef.current.currentTime = 0;
       minimapCheckAudioRef.current.play();
       minimapCheckAudioRef.current.volume = 1;
       minimapCheckAudioRef.current.currentTime = 0;

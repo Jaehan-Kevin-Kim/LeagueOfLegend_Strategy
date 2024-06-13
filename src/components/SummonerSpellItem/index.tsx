@@ -2,13 +2,16 @@ import React, { FC, useEffect } from "react";
 import { ISummonerSpell } from "../../models/SummonerSpells";
 import { Card, CardContent, CardMedia, Typography } from "@mui/material";
 import { useVersionStore } from "../../store/VersionStore";
+import { useOptionStore } from "../../store/OptionStore";
 
 interface Props {
   spell: ISummonerSpell;
 }
 
 const SummonerSpellItem: FC<Props> = ({ spell }) => {
+  const { testMode } = useOptionStore((state) => state.options);
   const latestVersion = useVersionStore((state) => state.latestVersion);
+
   //   useEffect(() => {
   //     checkIfSpellContainsClassicMode();
   //   }, [spell]);
@@ -25,10 +28,12 @@ const SummonerSpellItem: FC<Props> = ({ spell }) => {
 
   return (
     <Card sx={{ p: 0, maxHeight: 145 }}>
-      <CardMedia
-        component="img"
-        image={`https://ddragon.leagueoflegends.com/cdn/${latestVersion}/img/spell/${spell.image.full}`}
-        sx={{ width: 80, height: 80 }}></CardMedia>
+      {!testMode && (
+        <CardMedia
+          component="img"
+          image={`https://ddragon.leagueoflegends.com/cdn/${latestVersion}/img/spell/${spell.image.full}`}
+          sx={{ width: 80, height: 80 }}></CardMedia>
+      )}
       <CardContent
         sx={{
           pb: 0,

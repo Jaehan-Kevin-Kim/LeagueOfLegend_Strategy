@@ -8,6 +8,8 @@ import useSummonerSpellStoreHook from "../../hooks/useSummonerSpellStoreHook";
 import { useOptionStore } from "../../store/OptionStore";
 import { useGetChampionInfo } from "../../store/ChampionStore";
 import SummonerSpells from "../../components/SummonerSpells";
+import AlertPeriodBar from "../../components/AlertPeriodBar/index";
+import { SliderTypes } from "../../models/Options";
 
 export interface TeamChampInfo {
   team: string;
@@ -38,13 +40,44 @@ const minimapAlertRepeatTimeMarks = [
   },
 ];
 
+const gameReminderRepeatTimeMarks = [
+  {
+    value: 10,
+    label: "10",
+  },
+  {
+    value: 20,
+    label: "20",
+  },
+  {
+    value: 30,
+    label: "30",
+  },
+  {
+    value: 40,
+    label: "40",
+  },
+  {
+    value: 50,
+    label: "50",
+  },
+  {
+    value: 60,
+    label: "60",
+  },
+];
+
 const Strategy = () => {
   const executeGetChampionsWithVersion = useChampionStoreHook();
   const getSummonerSpellsWithVersion = useSummonerSpellStoreHook();
   const { updateTeamChampsInfo, resetSpecificTeamChampsInfo, teamChampsInfo } =
     useGetChampionInfo();
-  const { options, minimapAlertRepeatPeriod, updateMinimapAlertRepeatPeriod } =
-    useOptionStore();
+  const {
+    options,
+    minimapAlertRepeatPeriod,
+    updateMinimapAlertRepeatPeriod,
+    gameReminderAlertPeriod,
+  } = useOptionStore();
   // const [teamChampsInfo, setTeamChampsInfo] = useState<TeamChampInfo[]>([]);
   const [myTeamChampsInfo, setMyTeamChampsInfo] = useState<TeamChampInfo[]>([]);
   const [opponentTeamChampsInfo, setOpponentTeamChampsInfo] = useState<
@@ -192,23 +225,19 @@ const Strategy = () => {
           </Grid>
         )}
       </Grid>
-      <Box sx={{ width: "100%", display: "flex", justifyContent: "center" }}>
-        <Box sx={{ width: 250 }}>
-          <Typography sx={{ textAlign: "center" }}>
-            Minimap Alert Repeat Time (Sec)
-          </Typography>
-          <Slider
-            aria-label="Always visible"
-            // value={repeatMinimapAlertTime}
-            value={minimapAlertRepeatPeriod}
-            step={null}
-            min={3}
-            max={15}
-            onChange={onChangeMinimapAlertRepeatPeriodSlider}
-            marks={minimapAlertRepeatTimeMarks}
-            valueLabelDisplay="auto"></Slider>
-        </Box>
-      </Box>
+
+      <AlertPeriodBar
+        title="Minimap Alert Repeat Time"
+        value={minimapAlertRepeatPeriod}
+        marks={minimapAlertRepeatTimeMarks}
+        type={SliderTypes.MinimapAlert}
+      />
+      <AlertPeriodBar
+        title="Game Reminder Repeat Time"
+        value={gameReminderAlertPeriod}
+        marks={gameReminderRepeatTimeMarks}
+        type={SliderTypes.GameReminder}
+      />
     </>
   );
 };

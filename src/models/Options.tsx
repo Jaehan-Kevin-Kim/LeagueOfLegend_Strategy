@@ -16,6 +16,11 @@ export interface IOptions {
   muteAll: boolean;
 }
 
+export enum SliderTypes {
+  MinimapAlert = "minimapAlert",
+  GameReminder = "gameReminder",
+}
+
 type languages = "KO" | "EN";
 export enum Languages {
   KR = "ko_KR",

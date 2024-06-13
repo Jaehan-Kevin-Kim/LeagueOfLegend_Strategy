@@ -1,23 +1,55 @@
 import { Box, Slider, Typography } from "@mui/material";
-import React from "react";
+import React, { FC, useCallback, useState } from "react";
+import { SliderTypes } from "../../models/Options";
+import { useOptionStore } from "../../store/OptionStore";
 
-const AlertPeriodBar = () => {
+interface Props {
+  title: string;
+  value: number;
+  marks: { value: number; label: string }[];
+  type: SliderTypes;
+  // onChangeSlider: () => {
+  //   event: Event;
+  //   newValue: number | number[];
+  //   type: SliderTypes;
+  // };
+}
+const AlertPeriodBar: FC<Props> = ({
+  title,
+  value,
+  marks,
+  type,
+  // onChangeSlider,
+}) => {
+  const [settingValue, setSettingValue] = useState(value);
+  const { updateSliderPeriod } = useOptionStore();
+
+  const onChangeSliderValue = useCallback(
+    (event: Event, newValue: number | number[]) => {
+      // return onChangeSlider(event, newValue, type);
+      const updatedValue = newValue as number;
+      setSettingValue(updatedValue);
+      updateSliderPeriod(type, updatedValue);
+    },
+
+    [updateSliderPeriod],
+  );
+
   return (
-    <Box sx={{ width: "100%", display: "flex", justifyContent: "center" }}>
+    <Box
+      sx={{ width: "100%", display: "flex", justifyContent: "center", mt: 5 }}>
       <Box sx={{ width: 250 }}>
-        <Typography sx={{ textAlign: "center" }}>
-          Minimap Alert Repeat Time (Sec)
-        </Typography>
-        {/* <Slider
+        <Typography sx={{ textAlign: "center" }}>{title} (Sec)</Typography>
+        <Slider
           aria-label="Always visible"
           // value={repeatMinimapAlertTime}
-          value={minimapAlertRepeatPeriod}
+          value={settingValue}
           step={null}
-          min={3}
-          max={15}
-          onChange={onChangeMinimapAlertRepeatPeriodSlider}
-          marks={minimapAlertRepeatTimeMarks}
-          valueLabelDisplay="auto"></Slider> */}
+          min={marks[0].value}
+          max={marks[marks.length - 1].value}
+          onChange={onChangeSliderValue}
+          marks={marks}
+          valueLabelDisplay="auto"></Slider>
       </Box>
     </Box>
   );

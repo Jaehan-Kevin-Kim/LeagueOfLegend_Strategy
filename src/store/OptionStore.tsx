@@ -1,9 +1,10 @@
 import { create } from "zustand";
-import { IOptions, Languages } from "../models/Options";
+import { IOptions, Languages, SliderTypes } from "../models/Options";
 
 interface OptionStore extends OptionState {
   updateOption: (options: IOptions) => void;
   updateMinimapAlertRepeatPeriod: (time: number) => void;
+  updateSliderPeriod: (sliderType: SliderTypes, time: number) => void;
 }
 
 interface OptionState {
@@ -18,14 +19,14 @@ const initialState: OptionState = {
     showSkillDetails: true,
     showMyTeam: true,
     showOpponent: true,
-    showSpells: false,
+    showSpells: true,
     showPositions: true,
     alarmSound: true,
-    testMode: false,
+    testMode: process.env.NODE_ENV === "development" ? true : false,
     minimapAlertSound: true,
     language: Languages.KR,
     darkMode: false,
-    newWaveCreationSound: true,
+    newWaveCreationSound: false,
     gameReminderAlertSound: true,
     muteAll: false,
   },
@@ -43,6 +44,21 @@ export const useOptionStore = create<OptionStore>((set, get) => ({
     set({ ...initialState, options });
   },
 
+  updateSliderPeriod: (sliderType: SliderTypes, time: number) => {
+    // if (sliderType === SliderTypes)
+    const currentOptions = get().options;
+
+    switch (sliderType) {
+      case SliderTypes.MinimapAlert:
+        set({ ...currentOptions, minimapAlertRepeatPeriod: time });
+        break;
+
+      case SliderTypes.GameReminder:
+        set({ ...currentOptions, gameReminderAlertPeriod: time });
+        break;
+    }
+  },
+
   updateMinimapAlertRepeatPeriod: (time: number) => {
     const currentOptions = get().options;
     set({ ...currentOptions, minimapAlertRepeatPeriod: time });
@@ -53,7 +69,3 @@ export const useOptionStore = create<OptionStore>((set, get) => ({
     set({ ...currentOptions, gameReminderAlertPeriod: time });
   },
 }));
-
-// wave;
-// spell;
-// skill;
