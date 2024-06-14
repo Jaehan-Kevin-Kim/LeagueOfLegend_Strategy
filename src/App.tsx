@@ -17,6 +17,7 @@ import TimerComponent from "./components/Timer";
 import { useVersionStore } from "./store/VersionStore";
 import { createTheme, CssBaseline, ThemeProvider } from "@mui/material";
 import { useOptionStore } from "./store/OptionStore";
+import RealTimeData from "./pages/RealTimeData";
 
 const App = () => {
   // const { latestVersion, getLatestVersion } = useVersionStore();
@@ -63,6 +64,7 @@ const App = () => {
           <Route path="/" element={<Navigate to="/strategy" />}></Route>
           <Route path="/strategy" element={<Strategy />} />
           <Route path="/home" element={<Home />} />
+          <Route path="/real-time-data" element={<RealTimeData />} />
           {/* <div className="App dark:bg-slate-800">
         <h1 className="text-3xl font-bold underline">Hello world!</h1>
         <h1>Hello World</h1>

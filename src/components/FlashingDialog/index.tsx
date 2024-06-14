@@ -16,14 +16,21 @@ interface Props {
   message: string;
   isActive: boolean;
   alertCloseHandle: () => void;
+  messageAudio: string;
 }
-const FlashingDialog: FC<Props> = ({ message, isActive, alertCloseHandle }) => {
+const FlashingDialog: FC<Props> = ({
+  message,
+  isActive,
+  alertCloseHandle,
+  messageAudio,
+}) => {
   const { alarmSound } = useOptionStore((state) => state.options);
 
   const [color, setColor] = useState("yellow");
   const [seconds, setSeconds] = useState(0);
   const [audioVolume, setVolume] = useState(0.05);
   const alarmAudioRef = useRef(new Audio("/sounds/alarm-sound.mp3"));
+  const messageAudioRef = useRef(new Audio(messageAudio));
 
   useEffect(() => {
     // console.log("isIsActive in FlashingDialog: ", isIsActive);
@@ -39,9 +46,16 @@ const FlashingDialog: FC<Props> = ({ message, isActive, alertCloseHandle }) => {
       alarmAudioRef.current.volume = audioVolume;
     }
 
-    if (seconds >= 6 && alarmSound) {
+    if (seconds >= 2 && alarmSound) {
       alarmAudioRef.current.pause();
       alarmAudioRef.current.currentTime = 0;
+      messageAudioRef.current.play();
+      messageAudioRef.current.volume = 1;
+    }
+
+    if (seconds >= 8 && alarmSound) {
+      messageAudioRef.current.pause();
+      messageAudioRef.current.currentTime = 0;
     }
 
     if (seconds >= 10) {

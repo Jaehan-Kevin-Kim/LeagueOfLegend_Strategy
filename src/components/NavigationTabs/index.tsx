@@ -29,6 +29,7 @@ const NavigationTabs = () => {
       <Tab label="Strategy" value="/strategy" />
       {/* <Tab label="Two" value="/two" /> */}
       <Tab label="Home" value="/home" />
+      <Tab label="Data" value="/real-time-data" />
     </Tabs>
   );
 };

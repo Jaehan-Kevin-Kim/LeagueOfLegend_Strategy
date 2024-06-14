@@ -21,6 +21,7 @@ const TimerComponent = () => {
   const [isStarted, setIsStarted] = useState(false);
   const [showAlert, setShowAlert] = useState(false);
   const [alertMessage, setAlertMessage] = useState("");
+  const [messageAudio, setMessageAudio] = useState("");
 
   const beepAudioRef = useRef(new Audio("/sounds/beep-sound.wav"));
   const minimapCheckAudioRef = useRef(
@@ -50,6 +51,7 @@ const TimerComponent = () => {
         console.log("call display");
         setShowAlert(true);
         setAlertMessage(timeAndMessage.message_kr);
+        setMessageAudio(timeAndMessage.audio);
       }
     });
 
@@ -156,6 +158,7 @@ const TimerComponent = () => {
           message={alertMessage}
           isActive={showAlert}
           alertCloseHandle={handleAlertClose}
+          messageAudio={messageAudio}
         />
       )}
       {/* <Dialog
