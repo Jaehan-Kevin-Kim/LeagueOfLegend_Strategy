@@ -226,7 +226,7 @@ const Strategy = () => {
         )}
       </Grid>
 
-      <AlertPeriodBar
+      {/* <AlertPeriodBar
         title="Minimap Alert Repeat Time"
         value={minimapAlertRepeatPeriod}
         marks={minimapAlertRepeatTimeMarks}
@@ -237,7 +237,7 @@ const Strategy = () => {
         value={gameReminderAlertPeriod}
         marks={gameReminderRepeatTimeMarks}
         type={SliderTypes.GameReminder}
-      />
+      /> */}
     </>
   );
 };

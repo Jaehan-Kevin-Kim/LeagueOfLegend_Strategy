@@ -15,11 +15,12 @@ import {
 } from "@mui/material";
 import { useOptionStore } from "../../store/OptionStore";
 import { Languages } from "../../models/Options";
+import AlertCard from "../AlertCard";
 
 const SettingsComponent = () => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
-  const { options, updateOption } = useOptionStore();
+  const { options, updateOption, alerts, updateAlerts } = useOptionStore();
 
   const [selectedLanguage, setSelectedLanguage] = useState<Languages>(
     Languages.KR,
@@ -50,7 +51,12 @@ const SettingsComponent = () => {
 
   const onClickMuteAllToggle = useCallback(() => {
     updateOption({ ...options, muteAll: !options.muteAll });
-  }, [options, updateOption]);
+    const updatedAlerts = alerts.alerts.map((alert) => ({
+      ...alert,
+      active: options.muteAll,
+    }));
+    updateAlerts(updatedAlerts);
+  }, [options, updateOption, updateAlerts]);
 
   return (
     <>
@@ -147,7 +153,7 @@ const SettingsComponent = () => {
             <FormControlLabel
               control={
                 <Switch
-                  name="alarmSound"
+                  name="Warning Sounds"
                   checked={options.alarmSound}
                   onChange={onChangeOptionSwitch}
                 />
@@ -155,6 +161,7 @@ const SettingsComponent = () => {
               // labelPlacement="end"
               label="Alarm Sound"></FormControlLabel>
           </MenuItem>
+          {/* 
           <MenuItem>
             <FormControlLabel
               control={
@@ -190,7 +197,7 @@ const SettingsComponent = () => {
               }
               // labelPlacement="end"
               label="Game Reminder Alert Sound"></FormControlLabel>
-          </MenuItem>
+          </MenuItem> */}
           <MenuItem>
             <FormControlLabel
               control={
@@ -259,6 +266,9 @@ const SettingsComponent = () => {
 
           {/* </ToggleButtonGroup> */}
         </Box>
+        {alerts.alerts.map((alert) => (
+          <AlertCard key={alert.key} alert={alert} />
+        ))}
       </Menu>
     </>
   );

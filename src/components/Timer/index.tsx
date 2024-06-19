@@ -8,10 +8,14 @@ import {
   Typography,
 } from "@mui/material";
 import { useCallback, useEffect, useRef, useState } from "react";
-import { ALERT_TIMES_MESSAGES } from "../../constants";
+import { ALERT_TIMES_MESSAGES, ALERTS } from "../../constants";
 import FlashingDialog from "../FlashingDialog";
 import { useOptionStore } from "../../store/OptionStore";
 import { Languages } from "../../models/Options";
+
+interface AlertRefs {
+  [key: string]: HTMLAudioElement;
+}
 
 const TimerComponent = () => {
   const optionState = useOptionStore((state) => state);
@@ -19,21 +23,23 @@ const TimerComponent = () => {
   const [seconds, setSeconds] = useState(0);
   const [isActive, setIsActive] = useState(false);
   const [isStarted, setIsStarted] = useState(false);
-  const [showAlert, setShowAlert] = useState(false);
+  const [showWarnings, setShowWarnings] = useState(false);
   const [alertMessage, setAlertMessage] = useState("");
   const [messageAudio, setMessageAudio] = useState("");
-
-  const beepAudioRef = useRef(new Audio("/sounds/beep-sound.wav"));
-  const minimapCheckAudioRef = useRef(
-    optionState.options.language === Languages.EN
-      ? new Audio("/sounds/minimap.mp3")
-      : new Audio("/sounds/minimap_kr.mp3"),
+  const [alertAudioQueue, setAlertAudioQueue] = useState<HTMLAudioElement[]>(
+    [],
   );
-  const newWaveCreationAudioRef = useRef(new Audio("/sounds/new_wave.mp3"));
-  const gameReminderAlertAudioRef = useRef(
-    optionState.options.language === Languages.EN
-      ? new Audio("/sounds/skill_spell_check.mp3")
-      : new Audio("/sounds/skill_spell_check_kr.mp3"),
+  const [isAlertPlaying, setIsAlertPlaying] = useState(false);
+
+  const alertRefs = useRef<AlertRefs>(
+    ALERTS.reduce<AlertRefs>((acc, alert) => {
+      acc[alert.key] = new Audio(
+        optionState.options.language === Languages.EN
+          ? alert.audio_en
+          : alert.audio_kr,
+      );
+      return acc;
+    }, {}),
   );
 
   useEffect(() => {
@@ -46,59 +52,91 @@ const TimerComponent = () => {
       interval && clearInterval(interval);
     }
 
-    ALERT_TIMES_MESSAGES.forEach((timeAndMessage) => {
-      if (timeAndMessage.seconds === seconds) {
-        console.log("call display");
-        setShowAlert(true);
-        setAlertMessage(timeAndMessage.message_kr);
-        setMessageAudio(timeAndMessage.audio);
-      }
-    });
-
-    if (optionState.options.muteAll) {
-      return;
-    }
-
-    if (
-      seconds >= 120 &&
-      optionState.options.minimapAlertSound &&
-      seconds % optionState.minimapAlertRepeatPeriod === 0
-    ) {
-      // beepAudioRef.current.play();
-      // beepAudioRef.current.volume = 0.07;
-      // beepAudioRef.current.currentTime = 0;
-      minimapCheckAudioRef.current.play();
-      minimapCheckAudioRef.current.volume = 1;
-      minimapCheckAudioRef.current.currentTime = 0;
-    }
-
-    // If newWaveCreationSound is on -> Start from 1:30, every 30 seconds alarm.
-    if (seconds >= 90) {
-      if (optionState.options.newWaveCreationSound && seconds % 30 === 0) {
-        newWaveCreationAudioRef.current.play();
-        newWaveCreationAudioRef.current.volume = 1;
-        newWaveCreationAudioRef.current.currentTime = 0;
-      }
-      if (
-        optionState.options.gameReminderAlertSound &&
-        seconds % optionState.gameReminderAlertPeriod === 0
-      ) {
-        gameReminderAlertAudioRef.current.play();
-        gameReminderAlertAudioRef.current.volume = 1;
-        gameReminderAlertAudioRef.current.currentTime = 0;
-      }
-    }
-
-    // If gameReminderAlertSound : Start from 1:40, every 20 secods alert sound
-
-    //
-
     return () => {
       if (interval) {
         clearInterval(interval);
       }
     };
-  }, [isActive, seconds, optionState.minimapAlertRepeatPeriod]);
+  }, [seconds, isActive]);
+
+  useEffect(() => {
+    // let interval: NodeJS.Timeout | null = null;
+    // if (isActive) {
+    //   interval = setInterval(() => {
+    //     setSeconds((seconds) => seconds + 1);
+    //   }, 1000);
+    // } else if (!isActive && seconds !== 0) {
+    //   interval && clearInterval(interval);
+    // }
+    console.log("call");
+
+    ALERT_TIMES_MESSAGES.forEach((timeAndMessage) => {
+      if (timeAndMessage.seconds === seconds) {
+        console.log("call display");
+        setShowWarnings(true);
+        setAlertMessage(timeAndMessage.message_kr);
+        setMessageAudio(timeAndMessage.audio);
+      }
+    });
+
+    handleAlerts(seconds);
+
+    if (optionState.options.muteAll) {
+      // alertAudioQueue.forEach((audio)=>{
+      //   audio.muted=true;
+      // })
+      setIsAlertPlaying(false);
+      setAlertAudioQueue([]);
+    }
+  }, [seconds, optionState.options.muteAll]);
+
+  useEffect(() => {
+    if (alertAudioQueue.length > 0 && !isAlertPlaying) {
+      playNextInQueue();
+    }
+  }, [alertAudioQueue, isAlertPlaying]);
+
+  const playNextInQueue = async () => {
+    if (alertAudioQueue.length === 0) {
+      return;
+    }
+
+    setIsAlertPlaying(true);
+    const audio = alertAudioQueue[0];
+    audio.play();
+    audio.onended = () => {
+      setAlertAudioQueue((prevQueue) => prevQueue.slice(1));
+      setIsAlertPlaying(false);
+    };
+  };
+
+  const handleAlerts = useCallback(
+    (seconds: number) => {
+      const newQueue: HTMLAudioElement[] = [];
+
+      optionState.alerts.alerts.forEach((alert) => {
+        if (
+          seconds === alert.startSeconds ||
+          (alert.active &&
+            seconds >= alert.startSeconds &&
+            seconds <= alert.endSeconds &&
+            (seconds - alert.startSeconds) % alert.periodSeconds === 0)
+        ) {
+          // currentAudio.play();
+          const currentAudio = alertRefs.current[alert.key];
+
+          if (currentAudio) {
+            newQueue.push(currentAudio);
+          }
+          // currentAudio.play();
+        }
+      });
+      if (newQueue.length > 0) {
+        setAlertAudioQueue((prevQueue) => [...prevQueue, ...newQueue]);
+      }
+    },
+    [seconds, optionState.alerts.alerts],
+  );
 
   const onClickTimerButton = useCallback(() => {
     setIsActive(!isActive);
@@ -109,6 +147,8 @@ const TimerComponent = () => {
     setIsActive(false);
     setSeconds(0);
     setIsStarted(false);
+    setAlertAudioQueue([]);
+    setIsAlertPlaying(false);
   }, [isActive, isStarted, seconds]);
 
   const formatTimer = useCallback(() => {
@@ -123,7 +163,7 @@ const TimerComponent = () => {
   }, [seconds]);
 
   const handleAlertClose = () => {
-    setShowAlert(false);
+    setShowWarnings(false);
   };
 
   const onClickPlusOneSecond = useCallback(() => {
@@ -143,7 +183,7 @@ const TimerComponent = () => {
   return (
     <div>
       {/* <Snackbar
-        open={showAlert}
+        open={showWarnings}
         message="Snack bar!"
         autoHideDuration={6000}
         onClose={handleAutoCloseSnackBar}
@@ -153,10 +193,10 @@ const TimerComponent = () => {
           This is a warning Alert with a cautious title.
         </Alert>
       </Snackbar> */}
-      {showAlert && (
+      {showWarnings && (
         <FlashingDialog
           message={alertMessage}
-          isActive={showAlert}
+          isActive={showWarnings}
           alertCloseHandle={handleAlertClose}
           messageAudio={messageAudio}
         />
@@ -164,7 +204,7 @@ const TimerComponent = () => {
       {/* <Dialog
         // fullWidth={fullWidth}
         // maxWidth={maxWidth}
-        open={showAlert}
+        open={showWarnings}
         // onClose={handleClose}
       >
         <DialogTitle>Optional sizes</DialogTitle>

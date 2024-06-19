@@ -24,7 +24,7 @@ const FlashingDialog: FC<Props> = ({
   alertCloseHandle,
   messageAudio,
 }) => {
-  const { alarmSound } = useOptionStore((state) => state.options);
+  const { alarmSound, muteAll } = useOptionStore((state) => state.options);
 
   const [color, setColor] = useState("yellow");
   const [seconds, setSeconds] = useState(0);
@@ -41,19 +41,19 @@ const FlashingDialog: FC<Props> = ({
       setSeconds((prevSeconds) => prevSeconds + 0.5);
     }, 500);
 
-    if (alarmSound) {
+    if (alarmSound && !muteAll) {
       alarmAudioRef.current.play();
       alarmAudioRef.current.volume = audioVolume;
     }
 
-    if (seconds >= 2 && alarmSound) {
+    if (seconds >= 2 && alarmSound && !muteAll) {
       alarmAudioRef.current.pause();
       alarmAudioRef.current.currentTime = 0;
       messageAudioRef.current.play();
       messageAudioRef.current.volume = 1;
     }
 
-    if (seconds >= 8 && alarmSound) {
+    if (seconds >= 8 && alarmSound && !muteAll) {
       messageAudioRef.current.pause();
       messageAudioRef.current.currentTime = 0;
     }
@@ -66,7 +66,7 @@ const FlashingDialog: FC<Props> = ({
     }
 
     return () => clearInterval(interval);
-  }, [seconds, color, isActive]);
+  }, [seconds, color, isActive, muteAll]);
 
   const onCloseDialog = () => {
     console.log("close dialog call");
@@ -76,6 +76,7 @@ const FlashingDialog: FC<Props> = ({
   };
 
   const onClickMuteButton = () => {
+    alarmAudioRef.current.muted = true;
     setVolume(0);
     // alarmAudioRef.current.volume = 0;
   };
