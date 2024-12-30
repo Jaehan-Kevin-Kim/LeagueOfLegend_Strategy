@@ -44,7 +44,7 @@ interface OptionState {
 
 const initialState: OptionState = {
   options: {
-    minimumView: true,
+    minimumView: false,
     showSkillDetails: true,
     showMyTeam: true,
     showOpponent: true,
@@ -53,7 +53,7 @@ const initialState: OptionState = {
     alarmSound: true,
     testMode: process.env.NODE_ENV === "development" ? true : false,
     minimapAlertSound: true,
-    language: Languages.KR,
+    language: Languages.EN,
     darkMode: false,
     newWaveCreationSound: false,
     gameReminderAlertSound: true,

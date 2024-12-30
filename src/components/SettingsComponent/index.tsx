@@ -23,7 +23,7 @@ const SettingsComponent = () => {
   const { options, updateOption, alerts, updateAlerts } = useOptionStore();
 
   const [selectedLanguage, setSelectedLanguage] = useState<Languages>(
-    Languages.KR,
+    Languages.EN,
   );
 
   const handleClickMenu = (event: React.MouseEvent<HTMLButtonElement>) => {

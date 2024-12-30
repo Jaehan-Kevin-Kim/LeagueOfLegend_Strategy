@@ -14,6 +14,7 @@ import { BoxStyle, CardMediaStyle, CardStyle, TypographyStyle } from "./styles";
 import useChampionStoreHook from "../../hooks/useChampionStoreHook";
 import { useGetChampionInfo } from "../../store/ChampionStore";
 import { useOptionStore } from "../../store/OptionStore";
+import { Languages } from "../../models/Options";
 
 interface Props {
   onClose: () => void;
@@ -38,7 +39,7 @@ const SelectChampion: FC<Props> = ({
   const [filteredChampions, setFilteredChampions] = useState<IChampion[]>([]);
   const { data, loading, error } = useGetChampionInfo();
 
-  const { testMode } = useOptionStore((state) => state.options);
+  const { testMode, language } = useOptionStore((state) => state.options);
 
   // const executeGetChampionsWithVersion = useChampionStoreHook();
 
@@ -104,9 +105,11 @@ const SelectChampion: FC<Props> = ({
                   <Typography noWrap sx={TypographyStyle} variant="body2">
                     {champion.id}
                   </Typography>
-                  <Typography noWrap sx={TypographyStyle} variant="body2">
-                    {champion.name}
-                  </Typography>
+                  {language === Languages.KR && (
+                    <Typography noWrap sx={TypographyStyle} variant="body2">
+                      {champion.name}
+                    </Typography>
+                  )}
                 </CardContent>
               </Card>
             </Grid>
